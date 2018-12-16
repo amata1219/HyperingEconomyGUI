@@ -28,7 +28,7 @@ public class SplitRegion implements GraphicalUserInterface {
 
 		split.manager = manager;
 
-		Inventory inventory = ItemHelper.createInventory(9, Type.SPLIT_HOGOCHI);
+		Inventory inventory = ItemHelper.createInventory(9, Type.SPLIT_REGION);
 
 		ItemStack result = ItemHelper.createItem(Material.BOOK_AND_QUILL, ChatColor.GOLD + "", ChatColor.GRAY + "ここに説明文");
 

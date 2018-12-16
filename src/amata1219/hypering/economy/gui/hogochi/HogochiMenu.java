@@ -479,7 +479,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 			return;
 		}
 
-		CombineProtectedRegions combine = ((CombineProtectedRegions) manager.getGUI(Type.COMBINE_HOGOCHIES));
+		CombineProtectedRegions combine = ((CombineProtectedRegions) manager.getGUI(Type.COMBINE_REGIONS));
 
 		combine.update();
 
@@ -490,7 +490,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 
 		manager.setCase(Case.COMBINE_HOGOCHIES);
 
-		manager.display(Type.COMBINE_HOGOCHIES);
+		manager.display(Type.COMBINE_REGIONS);
 	}
 
 	public void splitRegion(Location loc){
@@ -517,7 +517,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 
 		manager.setCase(Case.SPLIT_HOGOCHI);
 
-		manager.display(Type.SPLIT_HOGOCHI);
+		manager.display(Type.SPLIT_REGION);
 	}
 
 	private Case getCase(int slotNumber){

@@ -147,10 +147,10 @@ public class Confirmation implements GraphicalUserInterface {
 				manager.display(Type.CONFIRMATION);
 				break;
 			case COMBINE_HOGOCHIES:
-				manager.display(Type.COMBINE_HOGOCHIES);
+				manager.display(Type.COMBINE_REGIONS);
 				break;
 			case SPLIT_HOGOCHI:
-				manager.display(Type.SPLIT_HOGOCHI);
+				manager.display(Type.SPLIT_REGION);
 				break;
 			default:
 				Util.warn(Message.CASE_NOT_FOUND_EXCEPTION, Util.caseToMaterial(cs), player);
@@ -390,7 +390,7 @@ public class Confirmation implements GraphicalUserInterface {
 				manager.close();
 				break;
 			case COMBINE_HOGOCHIES:
-				ProtectedRegion[] regions = ((CombineProtectedRegions) manager.getGUI(Type.COMBINE_HOGOCHIES)).getProtectedRegions();
+				ProtectedRegion[] regions = ((CombineProtectedRegions) manager.getGUI(Type.COMBINE_REGIONS)).getProtectedRegions();
 
 				ProtectedRegion combinedRegion = RegionByebye.combineRegions(regions[0], regions[1]);
 
@@ -404,7 +404,7 @@ public class Confirmation implements GraphicalUserInterface {
 				ProtectedRegion region1 = (ProtectedRegion) manager.memory.get(3);
 
 				if(RegionByebye.is50x50(region1))
-					regionArgs = RegionByebye.splitLargeRegion(region1, ((SplitRegion) manager.getGUI(Type.COMBINE_HOGOCHIES)).isAlongX());
+					regionArgs = RegionByebye.splitLargeRegion(region1, ((SplitRegion) manager.getGUI(Type.COMBINE_REGIONS)).isAlongX());
 				else
 					regionArgs = RegionByebye.splitSmallRegion(region1, false);
 

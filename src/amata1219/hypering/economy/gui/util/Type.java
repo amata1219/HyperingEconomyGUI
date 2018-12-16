@@ -10,8 +10,8 @@ public enum Type {
 	POSSESSION_MONEY_RANKING(5),
 	NOTIFICATION(6),
 	HOGOCHI_MENU(7),
-	COMBINE_HOGOCHIES(8),
-	SPLIT_HOGOCHI(9);
+	COMBINE_REGIONS(8),
+	SPLIT_REGION(9);
 
 	private final int id;
 
@@ -42,10 +42,10 @@ public enum Type {
 			return NOTIFICATION;
 		case "§6HOGOCHI_MENU":
 			return HOGOCHI_MENU;
-		case "§6COMBINE_HOGOCHIES":
-			return COMBINE_HOGOCHIES;
-		case "§6SPLIT_HOGOCHI":
-			return SPLIT_HOGOCHI;
+		case "§6COMBINE_REGIONS":
+			return COMBINE_REGIONS;
+		case "§6SPLIT_REGION":
+			return SPLIT_REGION;
 		default:
 			return null;
 		}

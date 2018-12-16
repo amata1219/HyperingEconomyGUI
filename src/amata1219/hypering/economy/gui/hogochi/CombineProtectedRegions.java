@@ -41,7 +41,7 @@ public class CombineProtectedRegions implements GraphicalUserInterface {
 
 		combine.manager = manager;
 
-		Inventory inventory = ItemHelper.createInventory(18, Type.COMBINE_HOGOCHIES);
+		Inventory inventory = ItemHelper.createInventory(18, Type.COMBINE_REGIONS);
 
 		ItemStack result = ItemHelper.createItem(Material.BOOK_AND_QUILL, ChatColor.GOLD + "", ChatColor.GRAY + "ここに説明文");
 
