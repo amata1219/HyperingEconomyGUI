@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
+
 import amata1219.hogochi.byebye.ClaimDeletedEvent;
 import amata1219.hogochi.byebye.RegionByebye;
 import amata1219.hypering.economy.gui.hogochi.HogochiMenu;
@@ -46,19 +47,13 @@ public class GUIListener implements Listener {
 	}
 
 	public static void load(){
-		GUIListener listener = new GUIListener();
-
-		HyperingEconomyGUI plugin = HyperingEconomyGUI.getPlugin();
-
-		plugin.getServer().getPluginManager().registerEvents(listener, plugin);
+		GUIListener.listener = new GUIListener();
 
 		listener.notification = Notification.load();
 		listener.playerList = PlayerList.load();
 
 		if(Electron.isEconomyEnable())
 			listener.possesionMoneyRanking = PossessionMoneyRanking.load();
-
-		GUIListener.listener = listener;
 	}
 
 	public void unload(){

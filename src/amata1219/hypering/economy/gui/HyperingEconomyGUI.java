@@ -38,17 +38,19 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 	public void onEnable(){
 		plugin = this;
 
+		saveDefaultConfig();
+
 		griefPrevention = (GriefPrevention) getPlugin("GriefPrevention");
 		worldEdit = (WorldEditPlugin) getPlugin("WorldEdit");
 		worldGuard = (WorldGuardPlugin) getPlugin("WorldGuard");
 
 		GUIListener.load();
 
-		plugin.getServer().getOnlinePlayers().forEach(player -> GUIListener.getListener().loadPlayerData(player));
+		getServer().getPluginManager().registerEvents(GUIListener.getListener(), this);
+
+		getServer().getOnlinePlayers().forEach(player -> GUIListener.getListener().loadPlayerData(player));
 
 		getCommand("g").setExecutor(this);
-
-		saveDefaultConfig();
 	}
 
 	@Override
