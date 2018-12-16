@@ -1,0 +1,12 @@
+name: HyperingEconomyGUI
+main: amata1219.hypering.economy.gui.HyperingEconomyGUI
+version: 1.0.0
+depend: [HyperingEconomy, HogochiByebye, HyperingAuctions]
+author: amata1219(Twitter@amata1219)
+
+commands:
+  g:
+    description: main command.
+    usage: /<command>
+    permission: hypering.economy.gui.g
+    permission-message: You do not have permission(<permission>).
