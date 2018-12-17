@@ -479,7 +479,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 			return;
 		}
 
-		CombineProtectedRegions combine = ((CombineProtectedRegions) manager.getGUI(Type.COMBINE_REGIONS));
+		CombineRegions combine = ((CombineRegions) manager.getGUI(Type.COMBINE_REGIONS));
 
 		combine.update();
 

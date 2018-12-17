@@ -24,7 +24,7 @@ import amata1219.hypering.economy.gui.util.Message;
 import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
 
-public class CombineProtectedRegions implements GraphicalUserInterface {
+public class CombineRegions implements GraphicalUserInterface {
 
 	private GUIManager manager;
 	private Inventory inventory;
@@ -32,12 +32,12 @@ public class CombineProtectedRegions implements GraphicalUserInterface {
 	private Compartment cpm;
 	private ImageMap map;
 
-	private CombineProtectedRegions(){
+	private CombineRegions(){
 
 	}
 
-	public static CombineProtectedRegions load(GUIManager manager){
-		CombineProtectedRegions combine = new CombineProtectedRegions();
+	public static CombineRegions load(GUIManager manager){
+		CombineRegions combine = new CombineRegions();
 
 		combine.manager = manager;
 

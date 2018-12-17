@@ -26,7 +26,7 @@ import amata1219.hypering.economy.HyperingEconomyAPI;
 import amata1219.hypering.economy.ServerName;
 import amata1219.hypering.economy.gui.GUIListener;
 import amata1219.hypering.economy.gui.HyperingEconomyGUI;
-import amata1219.hypering.economy.gui.hogochi.CombineProtectedRegions;
+import amata1219.hypering.economy.gui.hogochi.CombineRegions;
 import amata1219.hypering.economy.gui.hogochi.SplitRegion;
 import amata1219.hypering.economy.gui.util.Case;
 import amata1219.hypering.economy.gui.util.Color;
@@ -78,12 +78,12 @@ public class Confirmation implements GraphicalUserInterface {
 
 	@Override
 	public int getId() {
-		return 0;
+		return 3;
 	}
 
 	@Override
 	public Inventory getInventory() {
-		return null;
+		return inventory;
 	}
 
 	@Override
@@ -390,7 +390,7 @@ public class Confirmation implements GraphicalUserInterface {
 				manager.close();
 				break;
 			case COMBINE_HOGOCHIES:
-				ProtectedRegion[] regions = ((CombineProtectedRegions) manager.getGUI(Type.COMBINE_REGIONS)).getProtectedRegions();
+				ProtectedRegion[] regions = ((CombineRegions) manager.getGUI(Type.COMBINE_REGIONS)).getProtectedRegions();
 
 				ProtectedRegion combinedRegion = RegionByebye.combineRegions(regions[0], regions[1]);
 

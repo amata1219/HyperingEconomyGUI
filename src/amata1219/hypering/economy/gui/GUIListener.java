@@ -244,6 +244,8 @@ public class GUIListener implements Listener {
 		if(type == null)
 			return;
 
+		e.setCancelled(true);
+
 		GUIManager manager = managers.get(uuid);
 		if(manager == null)
 			return;

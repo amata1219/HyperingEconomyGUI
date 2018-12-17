@@ -9,6 +9,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import amata1219.hypering.economy.gui.HyperingEconomyGUI;
+import amata1219.hypering.economy.gui.hogochi.CombineRegions;
+import amata1219.hypering.economy.gui.hogochi.HogochiMenu;
+import amata1219.hypering.economy.gui.hogochi.SplitRegion;
 import amata1219.hypering.economy.gui.util.Case;
 import amata1219.hypering.economy.gui.util.Message;
 import amata1219.hypering.economy.gui.util.Type;
@@ -42,6 +45,12 @@ public class GUIManager {
 		manager.player = player;
 
 		manager.registerGUI(HomeMenu.load(manager));
+		manager.registerGUI(NumberScanner.load(manager));
+		manager.registerGUI(CharacterScanner.load(manager));
+		manager.registerGUI(Confirmation.load(manager));
+		manager.registerGUI(HogochiMenu.load(manager));
+		manager.registerGUI(CombineRegions.load(manager));
+		manager.registerGUI(SplitRegion.load(manager));
 
 		return manager;
 	}
@@ -71,7 +80,11 @@ public class GUIManager {
 	}
 
 	public void display(Type type){
-		player.openInventory(guis.get(type.getId()).getInventory());
+		GraphicalUserInterface gui = guis.get(type.getId());
+
+		gui.update();
+
+		player.openInventory(gui.getInventory());
 	}
 
 	public Case getCase(){
