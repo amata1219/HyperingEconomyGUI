@@ -80,9 +80,13 @@ public class GUIManager {
 	}
 
 	public void display(Type type){
+		if(type == Type.HOME_MENU)
+			guis.get(Type.CONFIRMATION.getId()).update();
+
 		GraphicalUserInterface gui = guis.get(type.getId());
 
-		gui.update();
+		if(type != Type.CONFIRMATION)
+			gui.update();
 
 		player.openInventory(gui.getInventory());
 	}

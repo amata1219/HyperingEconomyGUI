@@ -261,6 +261,8 @@ public class GUIListener implements Listener {
 		case NOTIFICATION:
 			notification.action(player, slotNumber);
 			break;
+		case POSSESSION_MONEY_RANKING:
+			break;
 		default:
 			manager.getGUI(type).push(slotNumber);
 			break;

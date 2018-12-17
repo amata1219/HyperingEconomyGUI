@@ -232,8 +232,6 @@ public class HogochiMenu implements GraphicalUserInterface {
 		manager.memory.put(3, region);
 		manager.memory.put(4, region.getId());
 
-		confirmation.update();
-
 		if(RegionByebye.isAdminRegion(region)){
 			confirmation.setResult(ChatColor.GOLD + "確認 | 土地の購入 - ID: " + region.getId() + " チケット160枚");
 			Util.normal(Message.CONFIRM + Message.caseToString(Case.BUY_HOGOCHI), ChatColor.GRAY + "ID: " + region.getId() + " チケット160枚", Util.caseToMaterial(Case.BUY_HOGOCHI), player);
@@ -444,8 +442,6 @@ public class HogochiMenu implements GraphicalUserInterface {
 		manager.memory.put(3, region);
 		manager.memory.put(4, region.getId());
 
-		confirmation.update();
-
 		confirmation.setResult(ChatColor.GOLD + "土地の更地化 | ID: " + region.getId());
 		confirmation.changeDisplayNames("更地化する" + ChatColor.DARK_RED + "(" + ChatColor.MAGIC + "i" + ChatColor.RESET + "" + ChatColor.DARK_RED + "元に戻せません" + ChatColor.MAGIC + "i" + ChatColor.RESET + "" + ChatColor.DARK_RED + ")", "破棄する");
 
@@ -480,8 +476,6 @@ public class HogochiMenu implements GraphicalUserInterface {
 		}
 
 		CombineRegions combine = ((CombineRegions) manager.getGUI(Type.COMBINE_REGIONS));
-
-		combine.update();
 
 		manager.memory.put(3, region);
 		manager.memory.put(4, region.getId());

@@ -13,6 +13,7 @@ import amata1219.hypering.economy.Database;
 import amata1219.hypering.economy.HyperingEconomyAPI;
 import amata1219.hypering.economy.MoneyRanking;
 import amata1219.hypering.economy.ServerName;
+import amata1219.hypering.economy.gui.GUIListener;
 import amata1219.hypering.economy.gui.hogochi.HogochiMenu;
 import amata1219.hypering.economy.gui.util.Case;
 import amata1219.hypering.economy.gui.util.ItemHelper;
@@ -157,7 +158,8 @@ public class HomeMenu implements GraphicalUserInterface {
 			manager.display(Type.NUMBER_SCANNER);
 			break;
 		case 6:
-			manager.display(Type.POSSESSION_MONEY_RANKING);
+			GUIListener.getListener().getPossesionMoneyRanking().update();
+			manager.getPlayer().openInventory(GUIListener.getListener().getPossesionMoneyRanking().getInventory());
 			break;
 		case 7:
 			Bukkit.dispatchCommand(manager.getPlayer(), "ca");
@@ -174,7 +176,8 @@ public class HomeMenu implements GraphicalUserInterface {
 			manager.close();
 			break;
 		case 13:
-			manager.display(Type.NOTIFICATION);
+			GUIListener.getListener().getNotification().update();
+			manager.getPlayer().openInventory(GUIListener.getListener().getNotification().getInventory());
 			break;
 		case 14:
 			HogochiMenu hogochiMenu = (HogochiMenu) manager.getGUI(Type.HOGOCHI_MENU);

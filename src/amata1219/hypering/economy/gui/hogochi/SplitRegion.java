@@ -83,8 +83,6 @@ public class SplitRegion implements GraphicalUserInterface {
 		if(slotNumber == 5){
 			Confirmation confirmation = (Confirmation) manager.getGUI(Type.CONFIRMATION);
 
-			confirmation.update();
-
 			confirmation.setResult(ChatColor.GOLD + "確認 | 土地の分割");
 			confirmation.changeDisplayNames("分割する", "破棄する");
 

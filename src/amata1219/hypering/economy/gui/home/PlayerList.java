@@ -107,8 +107,6 @@ public class PlayerList implements GraphicalUserInterface {
 
 			Confirmation plConfirmation = (Confirmation) manager.getGUI(Type.CONFIRMATION);
 
-			plConfirmation.update();
-
 			plConfirmation.setResult(ChatColor.GOLD + "確認 | 送金 - MCID: " + name + " 金額: ¥" + ((NumberScanner) manager.getGUI(Type.NUMBER_SCANNER)).getResult());
 
 			plConfirmation.changeDisplayNames("送金する", "破棄する");

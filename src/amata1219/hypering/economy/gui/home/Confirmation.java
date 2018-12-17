@@ -29,7 +29,6 @@ import amata1219.hypering.economy.gui.HyperingEconomyGUI;
 import amata1219.hypering.economy.gui.hogochi.CombineRegions;
 import amata1219.hypering.economy.gui.hogochi.SplitRegion;
 import amata1219.hypering.economy.gui.util.Case;
-import amata1219.hypering.economy.gui.util.Color;
 import amata1219.hypering.economy.gui.util.ItemHelper;
 import amata1219.hypering.economy.gui.util.Message;
 import amata1219.hypering.economy.gui.util.Type;
@@ -66,10 +65,8 @@ public class Confirmation implements GraphicalUserInterface {
 		inventory.setItem(5, enter);
 		inventory.setItem(6, cancel);
 
-		//隙間埋め用の羊毛
-
-		inventory.setItem(0, ItemHelper.createColorWool(Color.ORANGE));
-		inventory.setItem(8, ItemHelper.createColorWool(Color.RED_PURPLE));
+		inventory.setItem(0, ItemHelper.createSeasonalColorWool1());
+		inventory.setItem(8, ItemHelper.createSeasonalColorWool2());
 
 		confirmation.inventory = inventory;
 
@@ -181,7 +178,7 @@ public class Confirmation implements GraphicalUserInterface {
 					Util.success(Message.COMPLETED + "着金", ChatColor.GRAY + "MCID: " + manager.getPlayer().getName() + "\n金額: ¥" + number1, Util.caseToMaterial(Case.SEND_MONEY), sendTo.getPlayer());
 				break;
 			case BUY_TICKET:
-				int number2 = (int) manager.memory.get(0);
+				int number2 = Long.valueOf((long) manager.memory.get(0)).intValue();
 
 				api.buyTickets(serverName, uuid, number2);
 
@@ -190,7 +187,7 @@ public class Confirmation implements GraphicalUserInterface {
 				Util.success(Message.COMPLETED + Message.caseToString(Case.BUY_TICKET), ChatColor.GRAY + "チケット: " + number2 + "枚", Material.STORAGE_MINECART, player);
 				break;
 			case CASH_TICKET:
-				int number3 = (int) manager.memory.get(0);
+				long number3 = (long) manager.memory.get(0);
 
 				api.cashTickets(serverName, uuid, number3);
 
@@ -201,12 +198,6 @@ public class Confirmation implements GraphicalUserInterface {
 			case BUY_HOGOCHI:
 				long price = (long) manager.memory.get(5);
 				int tickets = (int) manager.memory.get(6);
-
-				if(price == -1 && tickets == -1){
-					Util.warn(Message.CASE_NOT_FOUND_EXCEPTION, Util.caseToMaterial(cs), player);
-					manager.close();
-					break;
-				}
 
 				if(price != -1){
 					if(!api.hasMoney(serverName, uuid, price)){
@@ -278,7 +269,7 @@ public class Confirmation implements GraphicalUserInterface {
 
 					RegionByebye.buy(player, region);
 
-					api.removeTickets(uuid, tickets);
+					api.removeTickets(serverName, uuid, tickets);
 
 					Util.success(Message.COMPLETED + Message.caseToString(Case.BUY_HOGOCHI), ChatColor.GRAY + "ID: " + ((String) manager.memory.get(4)) + "\nチケット: 160枚", Util.caseToMaterial(cs), player);
 

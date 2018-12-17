@@ -96,7 +96,7 @@ public class NumberScanner implements GraphicalUserInterface {
 
 	@Override
 	public Inventory getInventory() {
-		return null;
+		return inventory;
 	}
 
 	@Override
@@ -172,7 +172,6 @@ public class NumberScanner implements GraphicalUserInterface {
 			}
 
 			manager.memory.put(0, result);
-			manager.memory.put(0, result);
 
 			manager.display(Type.CHARACTER_SCANNER);
 			break;
@@ -182,7 +181,7 @@ public class NumberScanner implements GraphicalUserInterface {
 				break;
 			}
 
-			if(!api.hasMoney(serverName, uuid, result * api.getTicketPrice(serverName))){
+			if(!api.canBuyTickets(serverName, uuid, result)){
 				Util.warn(Message.WARN + Message.caseToString(cs), Message.NOT_ENOUGH_POSSESSION_MONEY, Util.caseToMaterial(cs), player);
 				return;
 			}
@@ -190,8 +189,6 @@ public class NumberScanner implements GraphicalUserInterface {
 			manager.memory.put(0, result);
 
 			Confirmation btConfirmation = (Confirmation) manager.getGUI(Type.CONFIRMATION);
-
-			btConfirmation.update();
 
 			btConfirmation.setResult(ChatColor.GOLD + "確認 | チケットの購入 - チケット: " + result + "枚");
 			btConfirmation.changeDisplayNames("購入する", "破棄する");
@@ -204,7 +201,7 @@ public class NumberScanner implements GraphicalUserInterface {
 				break;
 			}
 
-			if(!api.hasTickets(uuid, result)){
+			if(!api.canCashTickets(uuid, result)){
 				Util.warn(Message.WARN + Message.caseToString(manager.getCase()), Message.NOT_ENOUGH_POSSESSION_TICKET, Util.caseToMaterial(cs), player);
 				return;
 			}
@@ -212,8 +209,6 @@ public class NumberScanner implements GraphicalUserInterface {
 			manager.memory.put(0, result);
 
 			Confirmation stConfirmation = (Confirmation) manager.getGUI(Type.CONFIRMATION);
-
-			stConfirmation.update();
 
 			stConfirmation.setResult(ChatColor.GOLD + "確認 | チケットの換金 - チケット: " + result + "枚");
 			stConfirmation.changeDisplayNames("換金する", "破棄する");
@@ -224,8 +219,6 @@ public class NumberScanner implements GraphicalUserInterface {
 			manager.memory.put(0, result);
 
 			Confirmation shConfirmation = (Confirmation) manager.getGUI(Type.CONFIRMATION);
-
-			shConfirmation.update();
 
 			shConfirmation.setResult(ChatColor.GOLD + "確認 | 土地の販売 - ID: " + ((String) manager.memory.get(4)) + " 価格: ¥" + ((Long) manager.memory.get(0)));
 			shConfirmation.changeDisplayNames("販売する", "破棄する");

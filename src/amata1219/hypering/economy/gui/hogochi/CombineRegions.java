@@ -126,8 +126,6 @@ public class CombineRegions implements GraphicalUserInterface {
 
 			Confirmation confirmation = (Confirmation) manager.getGUI(Type.CONFIRMATION);
 
-			confirmation.update();
-
 			confirmation.setResult(ChatColor.GOLD + "確認 | 土地の結合");
 
 			confirmation.changeDisplayNames("結合する", "破棄する");

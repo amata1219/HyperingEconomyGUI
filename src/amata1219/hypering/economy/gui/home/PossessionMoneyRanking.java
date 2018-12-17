@@ -61,7 +61,7 @@ public class PossessionMoneyRanking implements GraphicalUserInterface {
 		HyperingEconomyAPI api = Database.getHyperingEconomyAPI();
 		MoneyRanking ranking = api.getMoneyRanking(Electron.getServerName());
 
-		int size = api.existSize();
+		long size = api.existSize();
 
 		ItemHelper.changeDisplayName(inventory.getItem(1), ChatColor.GOLD + "全体のプレイヤー数: " + size + "人");
 
