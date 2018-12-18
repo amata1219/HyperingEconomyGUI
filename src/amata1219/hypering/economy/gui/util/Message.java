@@ -20,7 +20,7 @@ public class Message {
 	public static final String IS_MAX_VALUE = ChatColor.GRAY + "これ以上入力出来ません。";
 	public static final String NOT_ALLOWED_ZERO = ChatColor.GRAY + "0を指定する事は出来ません。";
 	public static final String NOT_ENOUGH_POSSESSION_MONEY = ChatColor.GRAY + "所持金が足りません";
-	public static final String NOT_ENOUGH_POSSESSION_TICKET = ChatColor.GRAY + "所持しているチケットが足りません。";
+	public static final String NOT_ENOUGH_POSSESSION_TICKET = ChatColor.GRAY + "所持チケットが足りません。";
 	public static final String IS_MIN_LENGTH = ChatColor.GRAY + "これ以上削除出来ません。";
 	public static final String IS_MAX_LENGTH = ChatColor.GRAY + "これ以上入力出来ません。";
 	public static final String TRANSMISSION_DESTINATION_IS_NOT_EXIST = ChatColor.GRAY + "送信相手が不明です。";
@@ -50,11 +50,12 @@ public class Message {
 	public static final String THIS_HOGOCHI_IS_NOT_PROTECTED = ChatColor.GRAY + "この土地は保護されていません。";
 	public static final String CAN_NOT_SPLIT_OTHER_PLAYERS_HOGOCHI = ChatColor.GRAY + "他プレイヤーの土地は分割出来ません。";
 	public static final String CAN_NOT_SPLIT_HOGOCHI_SALE = ChatColor.GRAY + "販売中の土地は分割出来ません。";
+	public static final String CAN_NOT_SPLIT_SMALL_CLAIM = ChatColor.GRAY + "最小サイズの土地は分割出来ません。";
 
-	public static final String IS_NOT_EXIST_HOGOCHI = ChatColor.GRAY + "選択された場所に土地は存在しません";
+	public static final String IS_NOT_EXIST_HOGOCHI = ChatColor.GRAY + "選択された場所に土地は存在しません。";
 	public static final String HOGOCHI_WAS_DELETED = ChatColor.GRAY + "この土地は削除されました。 ";
 	public static final String OWNER_WITHDRAWED_HOGOCHI_SALE = ChatColor.GRAY + "この土地の販売は撤回されました。";
-	public static final String HOGOCHI_WAS_BOUGHT = ChatColor.GRAY + "この土地は他プレイヤーに購入されました。";;
+	public static final String HOGOCHI_WAS_BOUGHT = ChatColor.GRAY + "この土地は他プレイヤーに購入されました。";
 
 	public static final String CASE_NOT_FOUND_EXCEPTION = ChatColor.DARK_RED + "エラー | CaseNotFoundException\n" + ChatColor.GRAY + "GUIを閉じて操作し直して下さい。";
 

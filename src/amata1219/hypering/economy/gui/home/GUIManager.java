@@ -48,9 +48,10 @@ public class GUIManager {
 		manager.registerGUI(NumberScanner.load(manager));
 		manager.registerGUI(CharacterScanner.load(manager));
 		manager.registerGUI(Confirmation.load(manager));
-		manager.registerGUI(HogochiMenu.load(manager));
+		//manager.registerGUI(HogochiMenu.load(manager));
 		manager.registerGUI(CombineRegions.load(manager));
 		manager.registerGUI(SplitRegion.load(manager));
+		manager.registerGUI(HogochiMenu.load(manager));
 
 		return manager;
 	}
@@ -80,13 +81,9 @@ public class GUIManager {
 	}
 
 	public void display(Type type){
-		if(type == Type.HOME_MENU)
-			guis.get(Type.CONFIRMATION.getId()).update();
-
 		GraphicalUserInterface gui = guis.get(type.getId());
 
-		if(type != Type.CONFIRMATION)
-			gui.update();
+		gui.update();
 
 		player.openInventory(gui.getInventory());
 	}
@@ -156,7 +153,8 @@ public class GUIManager {
 	public void clear(){
 		cs = null;
 
-		memory.clear();
+		if(!memory.isEmpty())
+			memory.clear();
 	}
 
 }

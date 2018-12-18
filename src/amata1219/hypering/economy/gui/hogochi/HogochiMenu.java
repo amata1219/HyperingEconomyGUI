@@ -79,7 +79,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 	public void update(){
 		Player player = manager.getPlayer();
 
-		ItemStack status = ItemHelper.createSkull(player, ChatColor.GOLD + player.getName(), (String[]) null);
+		ItemStack status = inventory.getItem(1);
 
 		ItemHelper.clearLore(status);
 
@@ -106,6 +106,8 @@ public class HogochiMenu implements GraphicalUserInterface {
 			inventory.setItem(6, ItemHelper.createItem(Material.AIR));
 			inventory.setItem(7, ItemHelper.createItem(Material.AIR));
 		}
+
+		manager.getGUI(Type.COMBINE_REGIONS).clear();
 	}
 
 	@Override
@@ -125,6 +127,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 		if(isUseWorldGuard()){
 			if(!RegionByebye.isExistProtectedRegion(location.getBlockX(), location.getBlockZ())){
 				manager.setCase(cs);
+				setMeta(cs, player);
 				manager.hide();
 				Util.normal(Message.SELECT + Message.caseToString(cs), Message.LEFT_CLICK_TO_SELECT_HOGOCHI, Util.caseToMaterial(cs), player);
 				return;
@@ -155,6 +158,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 		}else{
 			if(!ClaimByebye.isExistClaim(location)){
 				manager.setCase(cs);
+				setMeta(cs, player);
 				manager.hide();
 				Util.normal(Message.SELECT + Message.caseToString(cs), Message.LEFT_CLICK_TO_SELECT_HOGOCHI, Util.caseToMaterial(cs), player);
 				return;
@@ -174,7 +178,9 @@ public class HogochiMenu implements GraphicalUserInterface {
 				return;
 			}
 		}
+	}
 
+	private void setMeta(Case cs, Player player){
 		switch(cs){
 		case BUY_HOGOCHI:
 			Meta.setMeta(player, Meta.BUY_HOGOCHI);
@@ -208,9 +214,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 
 		Confirmation confirmation = (Confirmation) manager.getGUI(Type.CONFIRMATION);
 
-		Location location = loc != null ? loc : player.getLocation();
-
-		ProtectedRegion region = RegionByebye.getProtectedRegion(location.getBlockX(), location.getBlockZ());
+		ProtectedRegion region = RegionByebye.getProtectedRegion(loc.getBlockX(), loc.getBlockZ());
 
 		if(!RegionByebye.isBuyable(region)){
 			Util.warn(Message.FAILED + Message.caseToString(Case.BUY_HOGOCHI), Message.NOT_SOLD_THIS_HOGOCHI, Util.caseToMaterial(Case.BUY_HOGOCHI), player);
@@ -233,9 +237,11 @@ public class HogochiMenu implements GraphicalUserInterface {
 		manager.memory.put(4, region.getId());
 
 		if(RegionByebye.isAdminRegion(region)){
-			confirmation.setResult(ChatColor.GOLD + "確認 | 土地の購入 - ID: " + region.getId() + " チケット160枚");
-			Util.normal(Message.CONFIRM + Message.caseToString(Case.BUY_HOGOCHI), ChatColor.GRAY + "ID: " + region.getId() + " チケット160枚", Util.caseToMaterial(Case.BUY_HOGOCHI), player);
+			manager.memory.put(6, RegionByebye.STONE);
+			confirmation.setResult(ChatColor.GOLD + "確認 | 土地の購入 - ID: " + region.getId() + " チケット: " + RegionByebye.STONE + "枚");
+			Util.normal(Message.CONFIRM + Message.caseToString(Case.BUY_HOGOCHI), ChatColor.GRAY + "ID: " + region.getId() + " チケット: " + RegionByebye.STONE + "枚", Util.caseToMaterial(Case.BUY_HOGOCHI), player);
 		}else{
+			manager.memory.put(5, RegionByebye.getPrice(region));
 			confirmation.setResult(ChatColor.GOLD + "確認 | 土地の購入 - ID: " + region.getId() + " ¥" + RegionByebye.getPrice(region));
 			Util.normal(Message.CONFIRM + Message.caseToString(Case.BUY_HOGOCHI), ChatColor.GRAY + "ID: " + region.getId() + " ¥" + RegionByebye.getPrice(region), Util.caseToMaterial(Case.BUY_HOGOCHI), player);
 		}
@@ -252,9 +258,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 
 		Confirmation confirmation = (Confirmation) manager.getGUI(Type.CONFIRMATION);
 
-		Location location = loc != null ? loc : player.getLocation();
-
-		Claim claim = ClaimByebye.getClaim(location);
+		Claim claim = ClaimByebye.getClaim(loc);
 
 		if(HyperingEconomyGUI.isMax(player, true)){
 			Util.warn(Message.WARN + Message.caseToString(Case.BUY_HOGOCHI), Message.TOO_MANY_HOGOCHI, Util.caseToMaterial(Case.BUY_HOGOCHI), player);
@@ -282,8 +286,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 		manager.memory.put(2, claim);
 		manager.memory.put(4, claim.getID());
 
-		confirmation.update();
-
+		manager.memory.put(5, ClaimByebye.getPrice(claim));
 		confirmation.setResult(ChatColor.GOLD + "確認 | 土地の購入 - ID: " + claim.getID() + " ¥" + ClaimByebye.getPrice(claim));
 		Util.normal(Message.CONFIRM + Message.caseToString(Case.BUY_HOGOCHI), ChatColor.GRAY + "ID: " + claim.getID() + " ¥" + ClaimByebye.getPrice(claim), Util.caseToMaterial(Case.BUY_HOGOCHI), player);
 
@@ -297,9 +300,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 	public void sellRegion(Location loc){
 		Player player = manager.getPlayer();
 
-		Location location = loc != null ? loc : player.getLocation();
-
-		ProtectedRegion region = RegionByebye.getProtectedRegion(location.getBlockX(), location.getBlockZ());
+		ProtectedRegion region = RegionByebye.getProtectedRegion(loc.getBlockX(), loc.getBlockZ());
 
 		if(!RegionByebye.isOwner(player, region)){
 			Util.warn(Message.FAILED + Message.caseToString(Case.SELL_HOGOCHI), Message.CAN_NOT_SELL_OTHER_PLAYERS_HOGOCHI, Util.caseToMaterial(Case.SELL_HOGOCHI), player);
@@ -326,9 +327,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 	public void sellClaim(Location loc){
 		Player player = manager.getPlayer();
 
-		Location location = loc != null ? loc : player.getLocation();
-
-		Claim claim = ClaimByebye.getClaim(location);
+		Claim claim = ClaimByebye.getClaim(loc);
 
 		if(!ClaimByebye.isOwner(player, claim)){
 			Util.warn(Message.FAILED + Message.caseToString(Case.SELL_HOGOCHI), Message.CAN_NOT_SELL_OTHER_PLAYERS_HOGOCHI, Util.caseToMaterial(Case.SELL_HOGOCHI), player);
@@ -357,9 +356,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 
 		Confirmation confirmation = ((Confirmation) manager.getGUI(Type.CONFIRMATION));
 
-		Location location = loc != null ? loc : player.getLocation();
-
-		ProtectedRegion region = RegionByebye.getProtectedRegion(location.getBlockX(), location.getBlockZ());
+		ProtectedRegion region = RegionByebye.getProtectedRegion(loc.getBlockX(), loc.getBlockZ());
 
 		if(!RegionByebye.isOwner(player, region)){
 			Util.warn(Message.FAILED + Message.caseToString(Case.WITHDRAW_HOGOCHI_SALE), Message.CAN_NOT_WITHDRAW_OTHER_PLAYERS_HOGOCHI_SALE, Util.caseToMaterial(Case.WITHDRAW_HOGOCHI_SALE), player);
@@ -376,8 +373,6 @@ public class HogochiMenu implements GraphicalUserInterface {
 		manager.memory.put(3, region);
 		manager.memory.put(4, region.getId());
 
-		confirmation.update();
-
 		confirmation.setResult(ChatColor.GOLD + "確認 | 土地販売の撤回 - ID: " + region.getId() + " 価格: " + "¥" + RegionByebye.getPrice(region));
 		confirmation.changeDisplayNames("販売を撤回する", "破棄する");
 
@@ -391,9 +386,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 
 		Confirmation confirmation = ((Confirmation) manager.getGUI(Type.CONFIRMATION));
 
-		Location location = loc != null ? loc : player.getLocation();
-
-		Claim claim = ClaimByebye.getClaim(location);
+		Claim claim = ClaimByebye.getClaim(loc);
 
 		if(!ClaimByebye.isOwner(player, claim)){
 			Util.warn(Message.FAILED + Message.caseToString(Case.WITHDRAW_HOGOCHI_SALE), Message.CAN_NOT_WITHDRAW_OTHER_PLAYERS_HOGOCHI_SALE, Util.caseToMaterial(Case.WITHDRAW_HOGOCHI_SALE), player);
@@ -423,9 +416,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 
 		Confirmation confirmation = ((Confirmation) manager.getGUI(Type.CONFIRMATION));
 
-		Location location = loc != null ? loc : player.getLocation();
-
-		ProtectedRegion region = RegionByebye.getProtectedRegion(location.getBlockX(), location.getBlockZ());
+		ProtectedRegion region = RegionByebye.getProtectedRegion(loc.getBlockX(), loc.getBlockZ());
 
 		if(!RegionByebye.isOwner(player, region)){
 			Util.warn(Message.FAILED + Message.caseToString(Case.FLATTEN_HOGOCHI), Message.CAN_NOT_FLATTEN_OTHER_PLAYERS_HOGOCHI, Util.caseToMaterial(Case.FLATTEN_HOGOCHI), player);
@@ -453,9 +444,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 	public void combineRegions(Location loc){
 		Player player = manager.getPlayer();
 
-		Location location = loc != null ? loc : player.getLocation();
-
-		ProtectedRegion region = RegionByebye.getProtectedRegion(location.getBlockX(), location.getBlockZ());
+		ProtectedRegion region = RegionByebye.getProtectedRegion(loc.getBlockX(), loc.getBlockZ());
 
 		if(!RegionByebye.isOwner(player, region)){
 			Util.warn(Message.FAILED + Message.caseToString(Case.COMBINE_HOGOCHIES), Message.CAN_NOT_COMBINE_OTHER_PLAYERS_HOGOCHI, Util.caseToMaterial(Case.COMBINE_HOGOCHIES), player);
@@ -490,9 +479,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 	public void splitRegion(Location loc){
 		Player player = manager.getPlayer();
 
-		Location location = loc != null ? loc : player.getLocation();
-
-		ProtectedRegion region = RegionByebye.getProtectedRegion(location.getBlockX(), location.getBlockZ());
+		ProtectedRegion region = RegionByebye.getProtectedRegion(loc.getBlockX(), loc.getBlockZ());
 
 		if(!RegionByebye.isOwner(player, region)){
 			Util.warn(Message.FAILED + Message.caseToString(Case.SPLIT_HOGOCHI), Message.CAN_NOT_SPLIT_OTHER_PLAYERS_HOGOCHI, Util.caseToMaterial(Case.SPLIT_HOGOCHI), player);
@@ -502,6 +489,12 @@ public class HogochiMenu implements GraphicalUserInterface {
 
 		if(RegionByebye.isBuyable(region)){
 			Util.warn(Message.FAILED + Message.caseToString(Case.SPLIT_HOGOCHI), Message.CAN_NOT_SPLIT_HOGOCHI_SALE, Util.caseToMaterial(Case.SPLIT_HOGOCHI), player);
+			manager.close();
+			return;
+		}
+
+		if(RegionByebye.is25x25(region)){
+			Util.warn(Message.FAILED + Message.caseToString(Case.SPLIT_HOGOCHI), Message.CAN_NOT_SPLIT_SMALL_CLAIM, Util.caseToMaterial(Case.SPLIT_HOGOCHI), player);
 			manager.close();
 			return;
 		}

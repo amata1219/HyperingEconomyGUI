@@ -79,7 +79,6 @@ public class CombineRegions implements GraphicalUserInterface {
 
 	@Override
 	public void update(){
-		clear();
 	}
 
 	@Override
@@ -104,6 +103,8 @@ public class CombineRegions implements GraphicalUserInterface {
 		Case cs = manager.getCase();
 
 		if(slotNumber == 11){
+			map = new ImageMap(getResult());
+
 			if(map.isNonSelected()){
 				Util.warn(Message.WARN + Message.caseToString(manager.getCase()), Message.IS_NOT_SELECTED, Util.caseToMaterial(cs), player);
 				return;
@@ -192,6 +193,8 @@ public class CombineRegions implements GraphicalUserInterface {
 
 			for(Direction direction : cpm.getDirections(pr))
 				ItemHelper.changeWoolColor(inventory.getItem(table.getSlotNumber(direction)), Color.YELLOW_GREEN);
+
+
 		}
 	}
 

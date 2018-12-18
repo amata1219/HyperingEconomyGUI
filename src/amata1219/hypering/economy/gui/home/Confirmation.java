@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -85,13 +84,12 @@ public class Confirmation implements GraphicalUserInterface {
 
 	@Override
 	public void update(){
-		clear();
 	}
 
 	@Override
 	public void clear(){
 		setResult("");
-		changeDisplayNames(ChatColor.GOLD + "一つ前のページに戻る", ChatColor.GOLD + "エンター", ChatColor.GOLD + "キャンセル");
+		changeDisplayNames(ChatColor.GOLD + "リターン", ChatColor.GOLD + "エンター", ChatColor.GOLD + "キャンセル");
 	}
 
 	@Override
@@ -134,8 +132,6 @@ public class Confirmation implements GraphicalUserInterface {
 				manager.display(Type.NUMBER_SCANNER);
 				break;
 			case CONFIRMATION_FLATTEN_HOGOCHI:
-				update();
-
 				setResult(ChatColor.GOLD + "確認 | 土地の更地化 - ID: " + ((String) ((String) manager.memory.get(4))));
 				changeDisplayNames("更地化する" + ChatColor.DARK_RED + "(" + ChatColor.MAGIC + "i" + ChatColor.RESET + "" + ChatColor.DARK_RED + "元に戻せません" + ChatColor.MAGIC + "i" + ChatColor.RESET + "" + ChatColor.DARK_RED + ")", ChatColor.RED + "破棄する");
 
@@ -196,10 +192,9 @@ public class Confirmation implements GraphicalUserInterface {
 				Util.success(Message.COMPLETED + Message.caseToString(Case.CASH_TICKET), ChatColor.GRAY + "チケット: " + number3 + "枚", Material.MINECART, player);
 				break;
 			case BUY_HOGOCHI:
-				long price = (long) manager.memory.get(5);
-				int tickets = (int) manager.memory.get(6);
+				if(manager.memory.containsKey(5)){
+					long price = (long) manager.memory.get(5);
 
-				if(price != -1){
 					if(!api.hasMoney(serverName, uuid, price)){
 						Util.warn(Message.WARN + Message.caseToString(manager.getCase()), Message.NOT_ENOUGH_POSSESSION_MONEY, Util.caseToMaterial(cs), player);
 						break;
@@ -248,6 +243,8 @@ public class Confirmation implements GraphicalUserInterface {
 
 					manager.close();
 				}else{
+					int tickets = (int) manager.memory.get(6);
+
 					if(!api.hasTickets(uuid, tickets)){
 						Util.warn(Message.WARN + Message.caseToString(manager.getCase()), Message.NOT_ENOUGH_POSSESSION_TICKET, Util.caseToMaterial(cs), player);
 						return;
@@ -331,21 +328,25 @@ public class Confirmation implements GraphicalUserInterface {
 			case CONFIRMATION_FLATTEN_HOGOCHI:
 				ProtectedRegion region = (ProtectedRegion) manager.memory.get(3);
 
-				int returnTickets = 0;
+				int returnTickets = RegionByebye.getNeedTickets(region);
+				System.out.println("return tickets: " + returnTickets);
 
-				api.addTickets(uuid, returnTickets = RegionByebye.getNeedTickets(region));
+				api.addTickets(uuid, returnTickets);
 
 				String oldId = region.getId();
 
 				if(RegionByebye.is50x50(region)){
-					returnTickets = 640;
-
 					ProtectedRegion[] results = RegionByebye.splitLargeRegion(region, true);
 
 					ProtectedRegion[] result1 = RegionByebye.splitSmallRegion(results[0], true);
 					ProtectedRegion[] result2 = RegionByebye.splitSmallRegion(results[1], true);
 
-					new BukkitRunnable(){
+					RegionByebye.flatten(result1[0]);
+					RegionByebye.flatten(result1[1]);
+					RegionByebye.flatten(result2[0]);
+					RegionByebye.flatten(result2[1]);
+
+					/*new BukkitRunnable(){
 
 						@Override
 						public void run(){
@@ -355,17 +356,13 @@ public class Confirmation implements GraphicalUserInterface {
 							RegionByebye.flatten(result2[1]);
 						}
 
-					}.runTaskLater(HyperingEconomyGUI.getPlugin(), 20);
+					}.runTaskLater(HyperingEconomyGUI.getPlugin(), 20);*/
 				}else if(RegionByebye.is50x25(region) || RegionByebye.is25x50(region)){
-					returnTickets = 320;
-
 					ProtectedRegion[] results = RegionByebye.splitSmallRegion(region, true);
 
 					RegionByebye.flatten(results[0]);
 					RegionByebye.flatten(results[1]);
 				}else{
-					returnTickets = 160;
-
 					RegionByebye.flatten(region);
 
 					Compartment cpm = new Compartment(region);

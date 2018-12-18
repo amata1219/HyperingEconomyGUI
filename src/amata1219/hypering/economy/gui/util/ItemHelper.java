@@ -212,7 +212,8 @@ public class ItemHelper {
 	}
 
 	public static void changeWoolColor(ItemStack item, Color color){
-		item.setDurability(color.getData());
+		if(item.getDurability() != color.getData())
+			item.setDurability(color.getData());
 	}
 
 	public static void changeSkullOwner(ItemStack item, OfflinePlayer player){

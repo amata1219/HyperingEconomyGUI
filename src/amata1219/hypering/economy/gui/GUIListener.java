@@ -11,14 +11,15 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import amata1219.hogochi.byebye.ClaimByebye;
 import amata1219.hogochi.byebye.ClaimDeletedEvent;
 import amata1219.hogochi.byebye.RegionByebye;
 import amata1219.hypering.economy.gui.hogochi.HogochiMenu;
@@ -125,6 +126,7 @@ public class GUIListener implements Listener {
 
 	@EventHandler
 	public void onDelete(ClaimDeletedEvent e){
+		System.out.println("HEGUI: CAUGHT CLAIM DELETED EVENT");
 		managers.values().forEach(m -> m.checkClaim(e.getClaim(), Message.HOGOCHI_WAS_DELETED));
 	}
 
@@ -163,49 +165,49 @@ public class GUIListener implements Listener {
 			switch(meta){
 			case BUY_HOGOCHI:
 				hogochiMenu.buyRegion(location);
-				break;
+				return;
 			case SELL_HOGOCHI:
 				hogochiMenu.sellRegion(location);
-				break;
+				return;
 			case WITHDRAW_HOGOCHI_SALE:
 				hogochiMenu.withdrawRegionSale(location);
-				break;
+				return;
 			case FLATTEN_HOGOCHI:
 				hogochiMenu.flattenRegion(location);
-				break;
+				return;
 			case COMBINE_HOGOCHIES:
 				hogochiMenu.combineRegions(location);
-				break;
+				return;
 			case SPLIT_HOGOCHI:
 				hogochiMenu.splitRegion(location);
-				break;
+				return;
 			default:
 				return;
 			}
 		}else{
+			if(!ClaimByebye.isExistClaim(location)){
+				Util.warn(Message.WARN + Message.caseToString(manager.getCase()), Message.IS_NOT_EXIST_HOGOCHI, Util.caseToMaterial(manager.getCase()), player);
+				return;
+			}
+
 			switch(meta){
 			case BUY_HOGOCHI:
 				hogochiMenu.buyClaim(location);
-				break;
+				return;
 			case SELL_HOGOCHI:
 				hogochiMenu.sellClaim(location);
-				break;
+				return;
 			case WITHDRAW_HOGOCHI_SALE:
 				hogochiMenu.withdrawClaimSale(location);
-				break;
+				return;
 			default:
 				return;
 			}
 		}
-
-		Util.warn(Message.WARN + Message.caseToString(manager.getCase()), Message.IS_NOT_EXIST_HOGOCHI, Util.caseToMaterial(manager.getCase()), player);
 	}
 
 	@EventHandler
-	public void onTeleport(PlayerTeleportEvent e){
-		if(e.getFrom().getWorld().getName().equals(e.getTo().getWorld().getName()))
-			return;
-
+	public void onTeleport(PlayerChangedWorldEvent e){
 		Player player = e.getPlayer();
 
 		Meta meta = Meta.getHasMeta(player);

@@ -14,7 +14,6 @@ import amata1219.hypering.economy.HyperingEconomyAPI;
 import amata1219.hypering.economy.MoneyRanking;
 import amata1219.hypering.economy.ServerName;
 import amata1219.hypering.economy.gui.GUIListener;
-import amata1219.hypering.economy.gui.hogochi.HogochiMenu;
 import amata1219.hypering.economy.gui.util.Case;
 import amata1219.hypering.economy.gui.util.ItemHelper;
 import amata1219.hypering.economy.gui.util.Message;
@@ -117,6 +116,19 @@ public class HomeMenu implements GraphicalUserInterface {
 		}
 
 		ItemHelper.addLore(status, ChatColor.GRAY + "チケット: " + api.getTickets(uuid) + "枚");
+
+		String worldName = manager.getPlayer().getWorld().getName();
+		if(worldName.equals("main") || worldName.equals("main_nether") || worldName.equals("main_end"))
+			inventory.getItem(14).setType(Material.GOLD_SPADE);
+		else if(worldName.equals("main_flat"))
+			inventory.getItem(14).setType(Material.WOOD_AXE);
+		else
+			inventory.getItem(14).setType(Material.STICK);
+
+		manager.getGUI(Type.CONFIRMATION).clear();
+
+		if(!manager.memory.isEmpty())
+			manager.memory.clear();
 	}
 
 	@Override
@@ -126,7 +138,7 @@ public class HomeMenu implements GraphicalUserInterface {
 	@Override
 	public void push(int slotNumber) {
 		if(!Electron.isEconomyEnable()){
-			if(slotNumber == 3 || slotNumber == 4 || slotNumber == 5 || slotNumber == 6 || slotNumber == 14){
+			if(slotNumber == 3 || slotNumber == 4 || slotNumber == 5 || slotNumber == 6 || slotNumber == 7 || slotNumber == 14){
 				Util.error(Message.WARN + "ホームメニュー", Message.CAN_NOT_USE_THIS_FUNCATION, Material.RAW_FISH, manager.getPlayer());
 				return;
 			}
@@ -159,6 +171,7 @@ public class HomeMenu implements GraphicalUserInterface {
 			break;
 		case 6:
 			GUIListener.getListener().getPossesionMoneyRanking().update();
+
 			manager.getPlayer().openInventory(GUIListener.getListener().getPossesionMoneyRanking().getInventory());
 			break;
 		case 7:
@@ -173,25 +186,22 @@ public class HomeMenu implements GraphicalUserInterface {
 
 			Util.success(Message.VOTE_ON_JPMCS, Material.RAW_FISH, manager.getPlayer());
 
-			manager.close();
+			manager.hide();
 			break;
 		case 13:
 			GUIListener.getListener().getNotification().update();
 			manager.getPlayer().openInventory(GUIListener.getListener().getNotification().getInventory());
 			break;
 		case 14:
-			HogochiMenu hogochiMenu = (HogochiMenu) manager.getGUI(Type.HOGOCHI_MENU);
-
 			String worldName = manager.getPlayer().getWorld().getName();
-			if(worldName.equals("main") || worldName.equals("world_nether") || worldName.equals("world_the_end") || worldName.equals("main_flat")){
-				Meta.removeMeta(manager.getPlayer());
-
-				hogochiMenu.update();
-
-				manager.display(Type.HOGOCHI_MENU);
-			}else{
+			if(!worldName.equals("main") && !worldName.equals("main_nether") && !worldName.equals("main_end") && !worldName.equals("main_flat")){
 				Util.error(Message.WARN + "ホームメニュー", Message.CAN_NOT_USE_THIS_FUNCATION, Material.RAW_FISH, manager.getPlayer());
+				return;
 			}
+
+			Meta.removeMeta(manager.getPlayer());
+
+			manager.display(Type.HOGOCHI_MENU);
 			break;
 		default:
 			break;
