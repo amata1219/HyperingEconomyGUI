@@ -126,7 +126,6 @@ public class GUIListener implements Listener {
 
 	@EventHandler
 	public void onDelete(ClaimDeletedEvent e){
-		System.out.println("HEGUI: CAUGHT CLAIM DELETED EVENT");
 		managers.values().forEach(m -> m.checkClaim(e.getClaim(), Message.HOGOCHI_WAS_DELETED));
 	}
 
