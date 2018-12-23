@@ -329,7 +329,6 @@ public class Confirmation implements GraphicalUserInterface {
 				ProtectedRegion region = (ProtectedRegion) manager.memory.get(3);
 
 				int returnTickets = RegionByebye.getNeedTickets(region);
-				System.out.println("return tickets: " + returnTickets);
 
 				api.addTickets(uuid, returnTickets);
 

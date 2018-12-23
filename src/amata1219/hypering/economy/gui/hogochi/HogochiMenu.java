@@ -123,7 +123,6 @@ public class HogochiMenu implements GraphicalUserInterface {
 		Player player = manager.getPlayer();
 
 		Location location = player.getLocation();
-
 		if(isUseWorldGuard()){
 			if(!RegionByebye.isExistProtectedRegion(location.getBlockX(), location.getBlockZ())){
 				manager.setCase(cs);
@@ -260,6 +259,12 @@ public class HogochiMenu implements GraphicalUserInterface {
 
 		Claim claim = ClaimByebye.getClaim(loc);
 
+		if(claim.isAdminClaim()){
+			Util.warn(Message.FAILED + Message.caseToString(Case.BUY_HOGOCHI), Message.NOT_SOLD_THIS_HOGOCHI, Util.caseToMaterial(Case.BUY_HOGOCHI), player);
+			manager.close();
+			return;
+		}
+
 		if(HyperingEconomyGUI.isMax(player, true)){
 			Util.warn(Message.WARN + Message.caseToString(Case.BUY_HOGOCHI), Message.TOO_MANY_HOGOCHI, Util.caseToMaterial(Case.BUY_HOGOCHI), player);
 			return;
@@ -329,6 +334,12 @@ public class HogochiMenu implements GraphicalUserInterface {
 
 		Claim claim = ClaimByebye.getClaim(loc);
 
+		if(claim.isAdminClaim()){
+			Util.warn(Message.FAILED + Message.caseToString(Case.SELL_HOGOCHI), Message.CAN_NOT_SELL_OTHER_PLAYERS_HOGOCHI, Util.caseToMaterial(Case.SELL_HOGOCHI), player);
+			manager.close();
+			return;
+		}
+
 		if(!ClaimByebye.isOwner(player, claim)){
 			Util.warn(Message.FAILED + Message.caseToString(Case.SELL_HOGOCHI), Message.CAN_NOT_SELL_OTHER_PLAYERS_HOGOCHI, Util.caseToMaterial(Case.SELL_HOGOCHI), player);
 			manager.close();
@@ -387,6 +398,12 @@ public class HogochiMenu implements GraphicalUserInterface {
 		Confirmation confirmation = ((Confirmation) manager.getGUI(Type.CONFIRMATION));
 
 		Claim claim = ClaimByebye.getClaim(loc);
+
+		if(claim.isAdminClaim()){
+			Util.warn(Message.FAILED + Message.caseToString(Case.WITHDRAW_HOGOCHI_SALE), Message.CAN_NOT_WITHDRAW_OTHER_PLAYERS_HOGOCHI_SALE, Util.caseToMaterial(Case.WITHDRAW_HOGOCHI_SALE), player);
+			manager.close();
+			return;
+		}
 
 		if(!ClaimByebye.isOwner(player, claim)){
 			Util.warn(Message.FAILED + Message.caseToString(Case.WITHDRAW_HOGOCHI_SALE), Message.CAN_NOT_WITHDRAW_OTHER_PLAYERS_HOGOCHI_SALE, Util.caseToMaterial(Case.WITHDRAW_HOGOCHI_SALE), player);
