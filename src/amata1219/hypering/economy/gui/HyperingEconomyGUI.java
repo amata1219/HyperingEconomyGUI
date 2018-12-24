@@ -51,6 +51,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 		getServer().getOnlinePlayers().forEach(player -> GUIListener.getListener().loadPlayerData(player));
 
 		getCommand("g").setExecutor(this);
+		getCommand("greload").setExecutor(this);
 	}
 
 	@Override
@@ -67,7 +68,9 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 			}
 
 			GUIListener.getListener().getGUIManager((Player) sender).display(Type.HOME_MENU);
-			return true;
+		}else if(label.equalsIgnoreCase("greload")){
+			reloadConfig();
+			sender.sendMessage(ChatColor.AQUA + "コンフィグを再読み込みしました。");
 		}
 		return true;
 	}
