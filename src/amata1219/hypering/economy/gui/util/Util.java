@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
@@ -22,6 +23,37 @@ import amata1219.hypering.economy.gui.home.GUIManager;
 import amata1219.hypering.economy.gui.util.AdvancementAPI.FrameType;
 
 public class Util {
+
+	public static void broadcast(String message){
+		Bukkit.broadcastMessage(message);
+	}
+
+	public static void broadcast(String message, long delay){
+		new BukkitRunnable(){
+
+			@Override
+			public void run() {
+				broadcast(message);
+			}
+
+		}.runTaskLater(HyperingEconomyGUI.getPlugin(), delay);
+	}
+
+	public static void broadcast(Sound sound){
+		for(Player player : Bukkit.getOnlinePlayers())
+			player.playSound(player.getLocation(), sound, 1F, 2F);
+	}
+
+	public static void broadcast(Sound sound, int delay){
+		new BukkitRunnable(){
+
+			@Override
+			public void run() {
+				broadcast(sound);
+			}
+
+		}.runTaskLater(HyperingEconomyGUI.getPlugin(), delay);
+	}
 
 	public static Player getPlayer(UUID uuid){
 		return Bukkit.getPlayer(uuid);
@@ -152,6 +184,27 @@ public class Util {
 			@Override
 			public void run() {
 				api.delete(player);
+				api.delete();
+			}
+		}, 50);
+	}
+
+	public static void displayAll(String message){
+		AdvancementAPI api = new AdvancementAPI(new NamespacedKey(HyperingEconomyGUI.getPlugin(), "story/" + UUID.randomUUID().toString()))
+        .withFrame(FrameType.DEFAULT)
+        .withTrigger("minecraft:impossible")
+        .withIcon(caseToMaterial(null))
+        .withTitle(message)
+        .withDescription("")
+        .withAnnouncement(false)
+		.withBackground("minecraft:textures/blocks/bedrock.png");
+		api.loadAdvancement();
+		api.sendPlayer(Bukkit.getOnlinePlayers());
+
+		Bukkit.getScheduler().runTaskLater(HyperingEconomyGUI.getPlugin(), new Runnable() {
+			@Override
+			public void run() {
+				api.delete(Bukkit.getOnlinePlayers());
 				api.delete();
 			}
 		}, 50);

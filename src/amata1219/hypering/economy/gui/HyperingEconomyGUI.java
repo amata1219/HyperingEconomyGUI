@@ -9,20 +9,25 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
+import amata1219.hypering.economy.gui.util.TotalAssetsRanking;
 import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
+import amata1219.hypering.economy.spigot.Electron;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 
@@ -33,6 +38,9 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 	private static GriefPrevention griefPrevention;
 	private static WorldEditPlugin worldEdit;
 	private static WorldGuardPlugin worldGuard;
+
+	private BukkitTask rankingUpdater;
+	private TotalAssetsRanking ranking;
 
 	@Override
 	public void onEnable(){
@@ -46,16 +54,41 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 		GUIListener.load();
 
+		rankingUpdater = new BukkitRunnable(){
+
+			@Override
+			public void run(){
+				ranking = TotalAssetsRanking.load(Electron.getServerName());
+
+				GUIListener.getListener().getTotalAssetsRanking().apply();
+
+				Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
+				Util.broadcast(ChatColor.GOLD + "総資産ランキングが更新されました！");
+
+				for(int i = 1; i <= 5; i++){
+					if(!ranking.has(i))
+						break;
+
+					int delay = i * 8;
+					Util.broadcast(Sound.ENTITY_CHICKEN_EGG, delay);
+					Util.broadcast(ChatColor.GOLD + String.valueOf(i) + "位: " + Util.getName(ranking.matchedUniqueId(i)) + "\n" + ChatColor.GRAY + "¥" + ranking.getTotalAssets(i), delay);
+				}
+			}
+
+		}.runTaskTimer(this, 0, 6000);
+
 		getServer().getPluginManager().registerEvents(GUIListener.getListener(), this);
 
 		getServer().getOnlinePlayers().forEach(player -> GUIListener.getListener().loadPlayerData(player));
 
 		getCommand("g").setExecutor(this);
-		getCommand("greload").setExecutor(this);
+		getCommand("hegreload").setExecutor(this);
 	}
 
 	@Override
 	public void onDisable(){
+		rankingUpdater.cancel();
+
 		GUIListener.getListener().unload();
 	}
 
@@ -92,6 +125,10 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 		return griefPrevention;
 	}
 
+	public static TotalAssetsRanking getTotalAssetsRanking(){
+		return plugin.ranking;
+	}
+
 	public static boolean isMax(Player player, boolean isMain){
 		if(!isMain)
 			return getMainFlatRegionCount(player) >= 12;
@@ -114,6 +151,10 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 		return count;
 	}
 
+	public static int getBonusBlocks(UUID uuid){
+		return griefPrevention.dataStore.getPlayerData(uuid).getBonusClaimBlocks();
+	}
+
 	public static int getOtherClaimCount(Player player, boolean isNether){
 		int count = 0;
 		for(Claim claim : griefPrevention.dataStore.getPlayerData(player.getUniqueId()).getClaims()){
@@ -127,7 +168,10 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 	}
 
 	public static int getMainFlatRegionCount(Player player){
-		UUID uuid = player.getUniqueId();
+		return getMainFlatRegionCount(player.getUniqueId());
+	}
+
+	public static int getMainFlatRegionCount(UUID uuid){
 		int count = 0;
 
 		for(ProtectedRegion region : getRegionManager().getRegions().values()){

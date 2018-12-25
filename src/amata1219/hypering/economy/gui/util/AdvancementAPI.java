@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -330,6 +331,22 @@ public class AdvancementAPI {
 		}, 5);
 	}
 
+	@SuppressWarnings("deprecation")
+	public void delete(Collection<? extends Player> players){
+		for(Player p : players){
+			if(p.getAdvancementProgress(getAdvancement()).isDone()){
+				p.getAdvancementProgress(getAdvancement()).revokeCriteria("elytra");
+			}
+		}
+
+		Bukkit.getScheduler().runTaskLater(HyperingEconomyGUI.getPlugin(), new Runnable() {
+			@Override
+			public void run() {
+				CraftMagicNumbers.INSTANCE.removeAdvancement(getID());
+			}
+		}, 5);
+	}
+
 	public static String getMinecraftIDFrom(ItemStack stack) {
 		final int check = Item.getId(CraftItemStack.asNMSCopy(stack).getItem());
 		final MinecraftKey matching = Item.REGISTRY.keySet()
@@ -341,6 +358,14 @@ public class AdvancementAPI {
 
 	public void sendPlayer(Player ... player){
 		for(Player p : player){
+			if(!p.getAdvancementProgress(getAdvancement()).isDone()){
+				p.getAdvancementProgress(getAdvancement()).awardCriteria("elytra");
+			}
+		}
+	}
+
+	public void sendPlayer(Collection<? extends Player> players){
+		for(Player p : players){
 			if(!p.getAdvancementProgress(getAdvancement()).isDone()){
 				p.getAdvancementProgress(getAdvancement()).awardCriteria("elytra");
 			}

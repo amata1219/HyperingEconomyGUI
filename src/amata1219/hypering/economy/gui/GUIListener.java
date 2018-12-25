@@ -8,8 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -42,11 +44,13 @@ import amata1219.hypering.economy.gui.hogochi.HogochiMenu;
 import amata1219.hypering.economy.gui.home.GUIManager;
 import amata1219.hypering.economy.gui.home.Notification;
 import amata1219.hypering.economy.gui.home.PlayerList;
-import amata1219.hypering.economy.gui.home.PossessionMoneyRanking;
+import amata1219.hypering.economy.gui.home.TotalAssetsRankingTable;
 import amata1219.hypering.economy.gui.util.Message;
 import amata1219.hypering.economy.gui.util.Meta;
+import amata1219.hypering.economy.gui.util.TotalAssetsRanking;
 import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
+import amata1219.hypering.economy.spigot.CollectedEvent;
 import amata1219.hypering.economy.spigot.Electron;
 
 public class GUIListener implements Listener {
@@ -56,7 +60,7 @@ public class GUIListener implements Listener {
 	private HashMap<UUID, GUIManager> managers = new HashMap<>();
 
 	private PlayerList playerList;
-	private PossessionMoneyRanking possesionMoneyRanking;
+	private TotalAssetsRankingTable totalAssetsRanking;
 	private Notification notification;
 
 	private GUIListener(){
@@ -70,7 +74,7 @@ public class GUIListener implements Listener {
 		listener.playerList = PlayerList.load();
 
 		if(Electron.isEconomyEnable())
-			listener.possesionMoneyRanking = PossessionMoneyRanking.load();
+			listener.totalAssetsRanking = TotalAssetsRankingTable.load();
 	}
 
 	public void unload(){
@@ -85,8 +89,8 @@ public class GUIListener implements Listener {
 		return playerList;
 	}
 
-	public PossessionMoneyRanking getPossesionMoneyRanking(){
-		return possesionMoneyRanking;
+	public TotalAssetsRankingTable getTotalAssetsRanking(){
+		return totalAssetsRanking;
 	}
 
 	public Notification getNotification(){
@@ -117,6 +121,10 @@ public class GUIListener implements Listener {
 		return managers.get(player.getUniqueId());
 	}
 
+	private boolean isUseWorldGuard(Player player){
+		return player.getWorld().getName().equals("main_flat");
+	}
+
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e){
 		loadPlayerData(e.getPlayer());
@@ -136,8 +144,26 @@ public class GUIListener implements Listener {
 		unloadPlayerData(e.getPlayer());
 	}
 
-	private boolean isUseWorldGuard(Player player){
-		return player.getWorld().getName().equals("main_flat");
+	@EventHandler
+	public void onCollect(CollectedEvent e){
+		HashMap<UUID, Long> map = e.getMap();
+
+		List<UUID> uuids = new ArrayList<>(map.keySet());
+		List<Long> money = new ArrayList<>(map.values());
+
+		TotalAssetsRanking.quickSort(uuids, money, 0, uuids.size() - 1, true);
+
+		Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
+		Util.broadcast(ChatColor.GOLD + "稼ぎ人ランキング(30分間)！");
+
+		for(int i = 1; i <= 5; i++){
+			if(i > uuids.size())
+				break;
+
+			int delay = i * 8;
+			Util.broadcast(Sound.ENTITY_CHICKEN_EGG, delay);
+			Util.broadcast(ChatColor.GOLD + String.valueOf(i) + "位: " + Util.getName(uuids.get(i - 1)) + "\n" + ChatColor.GRAY + "¥" + money.get(i - 1), delay);
+		}
 	}
 
 	@EventHandler
@@ -382,7 +408,7 @@ public class GUIListener implements Listener {
 		case NOTIFICATION:
 			notification.action(player, slotNumber);
 			break;
-		case POSSESSION_MONEY_RANKING:
+		case TOTAL_ASSETS_RANKING_TABLE:
 			break;
 		default:
 			manager.getGUI(type).push(slotNumber);

@@ -11,13 +11,14 @@ import org.bukkit.inventory.ItemStack;
 
 import amata1219.hypering.economy.Database;
 import amata1219.hypering.economy.HyperingEconomyAPI;
-import amata1219.hypering.economy.MoneyRanking;
 import amata1219.hypering.economy.ServerName;
 import amata1219.hypering.economy.gui.GUIListener;
+import amata1219.hypering.economy.gui.HyperingEconomyGUI;
 import amata1219.hypering.economy.gui.util.Case;
 import amata1219.hypering.economy.gui.util.ItemHelper;
 import amata1219.hypering.economy.gui.util.Message;
 import amata1219.hypering.economy.gui.util.Meta;
+import amata1219.hypering.economy.gui.util.TotalAssetsRanking;
 import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
 import amata1219.hypering.economy.spigot.Electron;
@@ -95,40 +96,8 @@ public class HomeMenu implements GraphicalUserInterface {
 	}
 
 	@Override
-	public void update() {
-		ItemStack status = inventory.getItem(1);
+	public void update(){
 
-		ItemHelper.clearLore(status);
-
-		UUID uuid = manager.getUniqueId();
-
-		HyperingEconomyAPI api = Database.getHyperingEconomyAPI();
-		ServerName serverName = Electron.getServerName();
-
-		if(Electron.isEconomyEnable()){
-			MoneyRanking ranking = api.getMoneyRanking(serverName);
-
-			ItemHelper.addLore(status, ChatColor.GRAY + "所持金ランキングの順位: " + ranking.getRank(uuid));
-
-			ItemHelper.addLore(status, "");
-
-			ItemHelper.addLore(status, ChatColor.GRAY + "所持金: ¥" + api.getMoney(serverName, uuid));
-		}
-
-		ItemHelper.addLore(status, ChatColor.GRAY + "チケット: " + api.getTickets(uuid) + "枚");
-
-		String worldName = manager.getPlayer().getWorld().getName();
-		if(worldName.equals("main") || worldName.equals("main_nether") || worldName.equals("main_end"))
-			inventory.getItem(14).setType(Material.GOLD_SPADE);
-		else if(worldName.equals("main_flat"))
-			inventory.getItem(14).setType(Material.WOOD_AXE);
-		else
-			inventory.getItem(14).setType(Material.STICK);
-
-		manager.getGUI(Type.CONFIRMATION).clear();
-
-		if(!manager.memory.isEmpty())
-			manager.memory.clear();
 	}
 
 	@Override
@@ -170,9 +139,9 @@ public class HomeMenu implements GraphicalUserInterface {
 			manager.display(Type.NUMBER_SCANNER);
 			break;
 		case 6:
-			GUIListener.getListener().getPossesionMoneyRanking().update();
+			GUIListener.getListener().getTotalAssetsRanking().update();
 
-			manager.getPlayer().openInventory(GUIListener.getListener().getPossesionMoneyRanking().getInventory());
+			manager.getPlayer().openInventory(GUIListener.getListener().getTotalAssetsRanking().getInventory());
 			break;
 		case 7:
 			Bukkit.dispatchCommand(manager.getPlayer(), "ca");
@@ -206,6 +175,42 @@ public class HomeMenu implements GraphicalUserInterface {
 		default:
 			break;
 		}
+	}
+
+	public void apply() {
+		ItemStack status = inventory.getItem(1);
+
+		ItemHelper.clearLore(status);
+
+		UUID uuid = manager.getUniqueId();
+
+		HyperingEconomyAPI api = Database.getHyperingEconomyAPI();
+		ServerName serverName = Electron.getServerName();
+
+		if(Electron.isEconomyEnable()){
+			TotalAssetsRanking ranking = HyperingEconomyGUI.getTotalAssetsRanking();
+
+			ItemHelper.addLore(status, ChatColor.GRAY + "所持金ランキングの順位: " + ranking.getRank(uuid));
+
+			ItemHelper.addLore(status, "");
+
+			ItemHelper.addLore(status, ChatColor.GRAY + "所持金: ¥" + api.getMoney(serverName, uuid));
+		}
+
+		ItemHelper.addLore(status, ChatColor.GRAY + "チケット: " + api.getTickets(uuid) + "枚");
+
+		String worldName = manager.getPlayer().getWorld().getName();
+		if(worldName.equals("main") || worldName.equals("main_nether") || worldName.equals("main_end"))
+			inventory.getItem(14).setType(Material.GOLD_SPADE);
+		else if(worldName.equals("main_flat"))
+			inventory.getItem(14).setType(Material.WOOD_AXE);
+		else
+			inventory.getItem(14).setType(Material.STICK);
+
+		manager.getGUI(Type.CONFIRMATION).clear();
+
+		if(!manager.memory.isEmpty())
+			manager.memory.clear();
 	}
 
 }
