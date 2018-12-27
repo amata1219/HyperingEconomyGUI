@@ -145,7 +145,6 @@ public class CharacterScanner implements GraphicalUserInterface {
 		inventory.setItem(15, n);
 		inventory.setItem(16, o);
 		inventory.setItem(17, p);
-		//inventory.setItem(18, searchedResult);
 		inventory.setItem(19, q);
 		inventory.setItem(20, r);
 		inventory.setItem(21, s);

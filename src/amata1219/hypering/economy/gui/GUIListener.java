@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -30,6 +31,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -52,6 +54,10 @@ import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
 import amata1219.hypering.economy.spigot.CollectedEvent;
 import amata1219.hypering.economy.spigot.Electron;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class GUIListener implements Listener {
 
@@ -154,9 +160,7 @@ public class GUIListener implements Listener {
 		TotalAssetsRanking.quickSort(uuids, money, 0, uuids.size() - 1, true);
 
 		Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
-		Util.broadcast(ChatColor.AQUA + "稼ぎ人ランキング(30分間)！");
-		Util.broadcast("");
-
+		Util.broadcast(ChatColor.AQUA + "稼ぎ人ランキング！" + ChatColor.GRAY + "(30分間)");
 
 		for(int i = 1; i <= 5; i++){
 			if(i > uuids.size())
@@ -164,10 +168,8 @@ public class GUIListener implements Listener {
 
 			int delay = i * 8;
 			Util.broadcast(Sound.ENTITY_CHICKEN_EGG, delay);
-			Util.broadcast(ChatColor.AQUA + String.valueOf(i) + "位: " + ChatColor.GREEN + Util.getName(uuids.get(i - 1)) + " " + ChatColor.GRAY + "¥" + money.get(i - 1), delay);
+			Util.broadcast(ChatColor.AQUA + String.valueOf(i) + "位: " + ChatColor.RED + Util.getName(uuids.get(i - 1)) + " " + ChatColor.GRAY + "¥" + money.get(i - 1), delay);
 		}
-
-		map.clear();
 	}
 
 	@EventHandler
@@ -175,18 +177,32 @@ public class GUIListener implements Listener {
 		managers.values().forEach(m -> m.checkClaim(e.getClaim(), Message.HOGOCHI_WAS_DELETED));
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onVote(VotifierEvent e){
 		Vote vote = e.getVote();
 		String name = vote.getUsername();
 
-		OfflinePlayer player = Util.isPlayerExist(name);
+		OfflinePlayer player = Bukkit.getOfflinePlayer(name);
 		if(player == null || player.getName() == null){
 			System.out.println("Invalid vote: " + name);
 			return;
 		}
 
 		Database.getHyperingEconomyAPI().addTickets(player.getUniqueId(), 50);
+	}
+
+	public void vote(UUID uuid, String name){
+		Database.getHyperingEconomyAPI().addTickets(uuid, 50);
+
+		Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
+
+		TextComponent component = new TextComponent(ChatColor.LIGHT_PURPLE + name + "さんが投票しました！");
+		component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://minecraft.jp/servers/azisaba.net/vote"));
+		component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GRAY + "クリックすると投票ページへ飛びます！").create()));
+
+		for(Player player : Bukkit.getOnlinePlayers())
+			player.spigot().sendMessage(component);
 	}
 
 	private final List<EntityType> enemies = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(EntityType.ZOMBIE
@@ -292,8 +308,24 @@ public class GUIListener implements Listener {
 		Player player = e.getPlayer();
 
 		Meta meta = Meta.getHasMeta(player);
-		if(meta == null)
+		if(meta == null){
+			if(!player.isSneaking())
+				return;
+
+			if(!e.hasItem())
+				return;
+
+			ItemStack item = e.getItem();
+			if(item == null)
 			return;
+
+			String name = item.getType().name();
+			if(name.indexOf("PICKAXE") == -1 && name.indexOf("SPADE") == -1)
+				return;
+
+			HyperingEconomyGUI.getPlugin().antiGhostBlock(player);
+			return;
+		}
 
 		e.setCancelled(true);
 

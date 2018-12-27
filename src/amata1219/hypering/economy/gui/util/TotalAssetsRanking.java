@@ -15,6 +15,7 @@ import com.google.common.collect.HashBiMap;
 import amata1219.hypering.economy.Database;
 import amata1219.hypering.economy.ServerName;
 import amata1219.hypering.economy.gui.HyperingEconomyGUI;
+import amata1219.hypering.economy.spigot.Electron;
 
 public class TotalAssetsRanking {
 
@@ -59,7 +60,7 @@ public class TotalAssetsRanking {
 	}
 
 	public static long calc(long money, long price, UUID uuid){
-		return money + HyperingEconomyGUI.getMainFlatRegionCount(uuid) * 250 * price + HyperingEconomyGUI.getBonusBlocks(uuid) * 100;
+		return money + Database.getHyperingEconomyAPI().getTicketsValue(Electron.getServerName(), uuid) + HyperingEconomyGUI.getMainFlatRegionCount(uuid) * 250 * price + HyperingEconomyGUI.getBonusBlocks(uuid) * 100;
 	}
 
 	public int size(){

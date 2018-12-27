@@ -10,8 +10,13 @@ commands:
     usage: /<command>
     permission: hypering.economy.gui.g
     permission-message: You do not have permission(<permission>).
-  heg:
-    description: reload command.
+  d:
+    description: anti ghost blocks.
     usage: /<command>
-    permission: hypering.economy.gui.greload
+    permission: hypering.economy.gui.d
+    permission-message: You do not have permission(<permission>).
+  heg:
+    description: admin command.
+    usage: /<command>
+    permission: hypering.economy.gui.heg
     permission-message: You do not have permission(<permission>).

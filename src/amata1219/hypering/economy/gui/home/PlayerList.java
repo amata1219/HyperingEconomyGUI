@@ -91,10 +91,11 @@ public class PlayerList implements GraphicalUserInterface {
 			switch(cs){
 			case SEND_MONEY:
 				manager.display(Type.CHARACTER_SCANNER);
+				return;
 			default:
 				Util.warn(Message.CASE_NOT_FOUND_EXCEPTION, Util.caseToMaterial(cs), player);
+				return;
 			}
-			return;
 		}
 
 		String name = getName(character, slotNumber);

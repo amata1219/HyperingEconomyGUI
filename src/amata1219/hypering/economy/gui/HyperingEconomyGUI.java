@@ -37,6 +37,8 @@ import amata1219.hypering.economy.spigot.Electron;
 import amata1219.hypering.economy.spigot.VaultEconomy;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
@@ -62,6 +64,8 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 		GUIListener.load();
 
+		ranking = TotalAssetsRanking.load(Electron.getServerName());
+
 		rankingUpdater = new BukkitRunnable(){
 
 			@Override
@@ -72,14 +76,13 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 				GUIListener.getListener().getTotalAssetsRanking().apply();
 
-				if(updateCount < 5)
+				if(updateCount < 3)
 					return;
 
 				updateCount = 0;
 
 				Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
-				Util.broadcast(ChatColor.GOLD + "総資産ランキングが更新されました(スコアは総資産を自動評価したものです)！");
-				Util.broadcast("");
+				Util.broadcast(ChatColor.GOLD + "総資産ランキングが更新されました！" + ChatColor.GRAY + "(スコアは総資産を自動評価したものです)");
 
 				for(int i = 1; i <= 5; i++){
 					if(!ranking.has(i))
@@ -89,9 +92,23 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 					Util.broadcast(Sound.ENTITY_CHICKEN_EGG, delay);
 					Util.broadcast(ChatColor.GOLD + String.valueOf(i) + "位: " + ChatColor.RED + Util.getName(ranking.matchedUniqueId(i)) + " " + ChatColor.GRAY + "SCORE: " + ranking.getTotalAssets(i), delay);
 				}
+
+				Util.broadcast(Sound.ENTITY_CHICKEN_EGG, 48);
+
+				for(Player player : getServer().getOnlinePlayers()){
+					UUID uuid = player.getUniqueId();
+					new BukkitRunnable(){
+
+						@Override
+						public void run(){
+							player.sendMessage(ChatColor.GRAY + "> " + ranking.getRank(uuid) + "位: " + player.getName() + " SCORE: " + ranking.getTotalAssets(uuid));
+						}
+
+					}.runTaskLater(HyperingEconomyGUI.getPlugin(), 48);
+				}
 			}
 
-		}.runTaskTimer(this, 0, 6000);
+		}.runTaskTimer(this, 3000, 12000);
 
 		getServer().getPluginManager().registerEvents(GUIListener.getListener(), this);
 
@@ -108,8 +125,6 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 		GUIListener.getListener().unload();
 	}
-
-	private final Set<UUID> dcooldown = new HashSet<>();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
@@ -129,20 +144,12 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 				return true;
 			}
 
-			Player player = (Player) sender;
-			Location loc = player.getLocation();
-
-			int mx = loc.getBlockX() - 5, my = loc.getBlockY(), mz = loc.getBlockZ() - 5;
-
-			for(int x = loc.getBlockX() + 5; x >= mx; x--){
-				for(int x = loc.getBlockY() + 5; x >= mx; x--){
-					for(int x = loc.getBlockZ() + 5; x >= mx; x--){
-
-					}
-				}
-			}
+			antiGhostBlock((Player) sender);
+			return true;
 		}else if(label.equalsIgnoreCase("heg")){
 			if(args.length == 0){
+
+			}else if(args[0].equalsIgnoreCase("reload")){
 				reloadConfig();
 				sender.sendMessage(ChatColor.AQUA + "コンフィグを再読み込みしました。");
 				return true;
@@ -158,6 +165,20 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 					Util.broadcast(Sound.ENTITY_CHICKEN_EGG, delay);
 					Util.broadcast(ChatColor.GOLD + String.valueOf(i) + "位: " + ChatColor.RED + Util.getName(ranking.matchedUniqueId(i)) + " " + ChatColor.GRAY + "SCORE: " + ranking.getTotalAssets(i), delay);
 				}
+
+				Util.broadcast(Sound.ENTITY_CHICKEN_EGG, 48);
+
+				for(Player player : getServer().getOnlinePlayers()){
+					UUID uuid = player.getUniqueId();
+					new BukkitRunnable(){
+
+						@Override
+						public void run(){
+							player.sendMessage(ChatColor.GRAY + "> " + ranking.getRank(uuid) + "位: " + player.getName() + " SCORE: " + ranking.getTotalAssets(uuid));
+						}
+
+					}.runTaskLater(HyperingEconomyGUI.getPlugin(), 48);
+				}
 				return true;
 			}else if(args[0].equalsIgnoreCase("kasegibito")){
 				HashMap<UUID, Long> map = VaultEconomy.map;
@@ -169,9 +190,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 				Util.broadcast(ChatColor.DARK_RED + "-----DEBUG-----");
 				Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
-				Util.broadcast(ChatColor.AQUA + "稼ぎ人ランキング(30分間)！");
-				Util.broadcast("");
-
+				Util.broadcast(ChatColor.AQUA + "稼ぎ人ランキング！" + ChatColor.GRAY + "(30分間)");
 
 				for(int i = 1; i <= 5; i++){
 					if(i > uuids.size())
@@ -179,12 +198,92 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 					int delay = i * 8;
 					Util.broadcast(Sound.ENTITY_CHICKEN_EGG, delay);
-					Util.broadcast(ChatColor.AQUA + String.valueOf(i) + "位: " + ChatColor.GREEN + Util.getName(uuids.get(i - 1)) + " " + ChatColor.GRAY + "¥" + money.get(i - 1), delay);
+					Util.broadcast(ChatColor.AQUA + String.valueOf(i) + "位: " + ChatColor.RED + Util.getName(uuids.get(i - 1)) + " " + ChatColor.GRAY + "¥" + money.get(i - 1), delay);
 				}
+
+				map.clear();
+				return true;
+			}else if(args[0].equalsIgnoreCase("vote")){
+				if(!(sender instanceof Player)){
+					sender.sendMessage(ChatColor.RED + "ゲーム内から実行して下さい。");
+					return true;
+				}
+
+				Player player = (Player) sender;
+				Util.broadcast(ChatColor.DARK_RED + "-----DEBUG-----");
+
+				GUIListener.getListener().vote(player.getUniqueId(), player.getName());
 				return true;
 			}
 		}
 		return true;
+	}
+
+	public final Set<UUID> dcooldown = new HashSet<>();
+
+	public void antiGhostBlock(Player player){
+		UUID uuid = player.getUniqueId();
+		if(dcooldown.contains(uuid))
+			return;
+
+		dcooldown.add(uuid);
+
+		Location loc = player.getLocation().clone();
+
+		//AtomicInteger count = new AtomicInteger(0);
+
+		/*new BukkitRunnable(){
+
+			@Override
+			public void run(){
+
+				if(count.get() < 6)
+					slideYaw(player, loc, 10);
+				else if(count.get() > 18)
+					slideYaw(player, loc, -10);
+
+				if(count.incrementAndGet() > 24)
+					cancel();
+			}
+
+		}.runTaskTimer(this, 0, 2);*/
+
+		int mx = loc.getBlockX() - 5, my = loc.getBlockY(), mz = loc.getBlockZ() - 5;
+
+		for(int x = loc.getBlockX() + 5; x >= mx; x--){
+			for(int y = loc.getBlockY() + 5; y >= my; y--){
+				for(int z = loc.getBlockZ() + 5; z >= mz; z--){
+					loc.setX(x);
+					loc.setY(y);
+					loc.setZ(z);
+
+					loc.getBlock().getState().update();
+				}
+			}
+		}
+
+		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "You looked around…"));
+
+		new BukkitRunnable(){
+
+			@Override
+			public void run(){
+				dcooldown.remove(uuid);
+			}
+
+		}.runTaskLater(this, 100);
+	}
+
+	public void slideYaw(Player player, Location loc, float sliding){
+		float pitch = loc.getPitch() + sliding;
+		if(pitch > 180)
+			pitch = 180 - pitch;
+		else if(pitch <= -180)
+			pitch = -(pitch + 180);
+
+		loc.setPitch(pitch);
+
+		player.teleport(loc);
 	}
 
 	private Plugin getPlugin(String pluginName){

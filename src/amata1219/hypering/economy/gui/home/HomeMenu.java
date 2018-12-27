@@ -114,9 +114,11 @@ public class HomeMenu implements GraphicalUserInterface {
 			long money = api.getMoney(serverName, uuid);
 			ItemHelper.addLore(status, ChatColor.GRAY + "所持金: ¥" + money);
 
-			ItemHelper.addLore(status, "総資産:");
-			ItemHelper.addLore(status, ChatColor.GRAY + "順位: " + ranking.getRank(uuid));
-			ItemHelper.addLore(status, ChatColor.GRAY + "SCORE: " + TotalAssetsRanking.calc(money, api.getTicketPrice(serverName), uuid));
+			ItemHelper.addLore(status, ChatColor.GRAY + "");
+
+			ItemHelper.addLore(status, ChatColor.GRAY + "総資産:");
+			ItemHelper.addLore(status, ChatColor.GRAY + "  順位: " + ranking.getRank(uuid));
+			ItemHelper.addLore(status, ChatColor.GRAY + "  SCORE: " + TotalAssetsRanking.calc(money, api.getTicketPrice(serverName), uuid));
 		}
 
 		String worldName = manager.getPlayer().getWorld().getName();
