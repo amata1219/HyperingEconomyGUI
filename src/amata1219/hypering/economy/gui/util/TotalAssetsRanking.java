@@ -39,7 +39,7 @@ public class TotalAssetsRanking {
 				while(result.next()){
 					UUID uuid = UUID.fromString(result.getString("uuid"));
 					uuids.add(uuid);
-					assets.add(result.getLong(columnIndex) + HyperingEconomyGUI.getMainFlatRegionCount(uuid) * 250 * price + HyperingEconomyGUI.getBonusBlocks(uuid) * 100);
+					assets.add(calc(result.getLong(columnIndex), price, uuid));
 				}
 
 				result.close();
@@ -56,6 +56,10 @@ public class TotalAssetsRanking {
 		}
 
 		return ranking;
+	}
+
+	public static long calc(long money, long price, UUID uuid){
+		return money + HyperingEconomyGUI.getMainFlatRegionCount(uuid) * 250 * price + HyperingEconomyGUI.getBonusBlocks(uuid) * 100;
 	}
 
 	public int size(){

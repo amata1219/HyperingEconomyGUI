@@ -97,7 +97,40 @@ public class HomeMenu implements GraphicalUserInterface {
 
 	@Override
 	public void update(){
+		ItemStack status = inventory.getItem(1);
 
+		ItemHelper.clearLore(status);
+
+		UUID uuid = manager.getUniqueId();
+
+		HyperingEconomyAPI api = Database.getHyperingEconomyAPI();
+		ServerName serverName = Electron.getServerName();
+
+		ItemHelper.addLore(status, ChatColor.GRAY + "チケット: " + api.getTickets(uuid) + "枚");
+
+		if(Electron.isEconomyEnable()){
+			TotalAssetsRanking ranking = HyperingEconomyGUI.getTotalAssetsRanking();
+
+			long money = api.getMoney(serverName, uuid);
+			ItemHelper.addLore(status, ChatColor.GRAY + "所持金: ¥" + money);
+
+			ItemHelper.addLore(status, "総資産:");
+			ItemHelper.addLore(status, ChatColor.GRAY + "順位: " + ranking.getRank(uuid));
+			ItemHelper.addLore(status, ChatColor.GRAY + "SCORE: " + TotalAssetsRanking.calc(money, api.getTicketPrice(serverName), uuid));
+		}
+
+		String worldName = manager.getPlayer().getWorld().getName();
+		if(worldName.equals("main") || worldName.equals("main_nether") || worldName.equals("main_end"))
+			inventory.getItem(14).setType(Material.GOLD_SPADE);
+		else if(worldName.equals("main_flat"))
+			inventory.getItem(14).setType(Material.WOOD_AXE);
+		else
+			inventory.getItem(14).setType(Material.STICK);
+
+		manager.getGUI(Type.CONFIRMATION).clear();
+
+		if(!manager.memory.isEmpty())
+			manager.memory.clear();
 	}
 
 	@Override
@@ -175,42 +208,6 @@ public class HomeMenu implements GraphicalUserInterface {
 		default:
 			break;
 		}
-	}
-
-	public void apply() {
-		ItemStack status = inventory.getItem(1);
-
-		ItemHelper.clearLore(status);
-
-		UUID uuid = manager.getUniqueId();
-
-		HyperingEconomyAPI api = Database.getHyperingEconomyAPI();
-		ServerName serverName = Electron.getServerName();
-
-		if(Electron.isEconomyEnable()){
-			TotalAssetsRanking ranking = HyperingEconomyGUI.getTotalAssetsRanking();
-
-			ItemHelper.addLore(status, ChatColor.GRAY + "所持金ランキングの順位: " + ranking.getRank(uuid));
-
-			ItemHelper.addLore(status, "");
-
-			ItemHelper.addLore(status, ChatColor.GRAY + "所持金: ¥" + api.getMoney(serverName, uuid));
-		}
-
-		ItemHelper.addLore(status, ChatColor.GRAY + "チケット: " + api.getTickets(uuid) + "枚");
-
-		String worldName = manager.getPlayer().getWorld().getName();
-		if(worldName.equals("main") || worldName.equals("main_nether") || worldName.equals("main_end"))
-			inventory.getItem(14).setType(Material.GOLD_SPADE);
-		else if(worldName.equals("main_flat"))
-			inventory.getItem(14).setType(Material.WOOD_AXE);
-		else
-			inventory.getItem(14).setType(Material.STICK);
-
-		manager.getGUI(Type.CONFIRMATION).clear();
-
-		if(!manager.memory.isEmpty())
-			manager.memory.clear();
 	}
 
 }

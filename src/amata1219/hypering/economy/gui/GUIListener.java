@@ -154,7 +154,9 @@ public class GUIListener implements Listener {
 		TotalAssetsRanking.quickSort(uuids, money, 0, uuids.size() - 1, true);
 
 		Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
-		Util.broadcast(ChatColor.GOLD + "稼ぎ人ランキング(30分間)！");
+		Util.broadcast(ChatColor.AQUA + "稼ぎ人ランキング(30分間)！");
+		Util.broadcast("");
+
 
 		for(int i = 1; i <= 5; i++){
 			if(i > uuids.size())
@@ -162,8 +164,10 @@ public class GUIListener implements Listener {
 
 			int delay = i * 8;
 			Util.broadcast(Sound.ENTITY_CHICKEN_EGG, delay);
-			Util.broadcast(ChatColor.GOLD + String.valueOf(i) + "位: " + Util.getName(uuids.get(i - 1)) + "\n" + ChatColor.GRAY + "¥" + money.get(i - 1), delay);
+			Util.broadcast(ChatColor.AQUA + String.valueOf(i) + "位: " + ChatColor.GREEN + Util.getName(uuids.get(i - 1)) + " " + ChatColor.GRAY + "¥" + money.get(i - 1), delay);
 		}
+
+		map.clear();
 	}
 
 	@EventHandler

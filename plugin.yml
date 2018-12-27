@@ -10,7 +10,7 @@ commands:
     usage: /<command>
     permission: hypering.economy.gui.g
     permission-message: You do not have permission(<permission>).
-  hegreload:
+  heg:
     description: reload command.
     usage: /<command>
     permission: hypering.economy.gui.greload

@@ -5,10 +5,16 @@
 
 package amata1219.hypering.economy.gui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,6 +34,7 @@ import amata1219.hypering.economy.gui.util.TotalAssetsRanking;
 import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
 import amata1219.hypering.economy.spigot.Electron;
+import amata1219.hypering.economy.spigot.VaultEconomy;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 
@@ -40,6 +47,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 	private static WorldGuardPlugin worldGuard;
 
 	private BukkitTask rankingUpdater;
+	private int updateCount;
 	private TotalAssetsRanking ranking;
 
 	@Override
@@ -58,12 +66,20 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 			@Override
 			public void run(){
+				updateCount++;
+
 				ranking = TotalAssetsRanking.load(Electron.getServerName());
 
 				GUIListener.getListener().getTotalAssetsRanking().apply();
 
+				if(updateCount < 5)
+					return;
+
+				updateCount = 0;
+
 				Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
-				Util.broadcast(ChatColor.GOLD + "総資産ランキングが更新されました！");
+				Util.broadcast(ChatColor.GOLD + "総資産ランキングが更新されました(スコアは総資産を自動評価したものです)！");
+				Util.broadcast("");
 
 				for(int i = 1; i <= 5; i++){
 					if(!ranking.has(i))
@@ -71,7 +87,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 					int delay = i * 8;
 					Util.broadcast(Sound.ENTITY_CHICKEN_EGG, delay);
-					Util.broadcast(ChatColor.GOLD + String.valueOf(i) + "位: " + Util.getName(ranking.matchedUniqueId(i)) + "\n" + ChatColor.GRAY + "¥" + ranking.getTotalAssets(i), delay);
+					Util.broadcast(ChatColor.GOLD + String.valueOf(i) + "位: " + ChatColor.RED + Util.getName(ranking.matchedUniqueId(i)) + " " + ChatColor.GRAY + "SCORE: " + ranking.getTotalAssets(i), delay);
 				}
 			}
 
@@ -82,7 +98,8 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 		getServer().getOnlinePlayers().forEach(player -> GUIListener.getListener().loadPlayerData(player));
 
 		getCommand("g").setExecutor(this);
-		getCommand("hegreload").setExecutor(this);
+		getCommand("d").setExecutor(this);
+		getCommand("heg").setExecutor(this);
 	}
 
 	@Override
@@ -92,18 +109,80 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 		GUIListener.getListener().unload();
 	}
 
+	private final Set<UUID> dcooldown = new HashSet<>();
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
 		if(label.equalsIgnoreCase("g")){
+			if(args.length == 0){
+				if(!(sender instanceof Player)){
+					sender.sendMessage(ChatColor.RED + "ゲーム内から実行して下さい。");
+					return true;
+				}
+
+				GUIListener.getListener().getGUIManager((Player) sender).display(Type.HOME_MENU);
+				return true;
+			}
+		}else if(label.equalsIgnoreCase("d")){
 			if(!(sender instanceof Player)){
 				sender.sendMessage(ChatColor.RED + "ゲーム内から実行して下さい。");
 				return true;
 			}
 
-			GUIListener.getListener().getGUIManager((Player) sender).display(Type.HOME_MENU);
-		}else if(label.equalsIgnoreCase("greload")){
-			reloadConfig();
-			sender.sendMessage(ChatColor.AQUA + "コンフィグを再読み込みしました。");
+			Player player = (Player) sender;
+			Location loc = player.getLocation();
+
+			int mx = loc.getBlockX() - 5, my = loc.getBlockY(), mz = loc.getBlockZ() - 5;
+
+			for(int x = loc.getBlockX() + 5; x >= mx; x--){
+				for(int x = loc.getBlockY() + 5; x >= mx; x--){
+					for(int x = loc.getBlockZ() + 5; x >= mx; x--){
+
+					}
+				}
+			}
+		}else if(label.equalsIgnoreCase("heg")){
+			if(args.length == 0){
+				reloadConfig();
+				sender.sendMessage(ChatColor.AQUA + "コンフィグを再読み込みしました。");
+				return true;
+			}else if(args[0].equalsIgnoreCase("soushisan")){
+				Util.broadcast(ChatColor.DARK_RED + "-----DEBUG-----");
+				Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
+				Util.broadcast(ChatColor.GOLD + "総資産ランキングが更新されました！" + ChatColor.GRAY + "(スコアは総資産を自動評価したものです)");
+				for(int i = 1; i <= 5; i++){
+					if(!ranking.has(i))
+						break;
+
+					int delay = i * 8;
+					Util.broadcast(Sound.ENTITY_CHICKEN_EGG, delay);
+					Util.broadcast(ChatColor.GOLD + String.valueOf(i) + "位: " + ChatColor.RED + Util.getName(ranking.matchedUniqueId(i)) + " " + ChatColor.GRAY + "SCORE: " + ranking.getTotalAssets(i), delay);
+				}
+				return true;
+			}else if(args[0].equalsIgnoreCase("kasegibito")){
+				HashMap<UUID, Long> map = VaultEconomy.map;
+
+				List<UUID> uuids = new ArrayList<>(map.keySet());
+				List<Long> money = new ArrayList<>(map.values());
+
+				TotalAssetsRanking.quickSort(uuids, money, 0, uuids.size() - 1, true);
+
+				Util.broadcast(ChatColor.DARK_RED + "-----DEBUG-----");
+				Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
+				Util.broadcast(ChatColor.AQUA + "稼ぎ人ランキング(30分間)！");
+				Util.broadcast("");
+
+
+				for(int i = 1; i <= 5; i++){
+					if(i > uuids.size())
+						break;
+
+					int delay = i * 8;
+					Util.broadcast(Sound.ENTITY_CHICKEN_EGG, delay);
+					Util.broadcast(ChatColor.AQUA + String.valueOf(i) + "位: " + ChatColor.GREEN + Util.getName(uuids.get(i - 1)) + " " + ChatColor.GRAY + "¥" + money.get(i - 1), delay);
+				}
+				return true;
+			}
 		}
 		return true;
 	}
