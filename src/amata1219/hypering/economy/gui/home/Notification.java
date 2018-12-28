@@ -6,10 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import amata1219.hypering.economy.gui.GUIListener;
 import amata1219.hypering.economy.gui.util.ItemHelper;
 import amata1219.hypering.economy.gui.util.Type;
-import amata1219.hypering.economy.gui.util.Util;
 
 public class Notification implements GraphicalUserInterface {
 
@@ -24,7 +22,7 @@ public class Notification implements GraphicalUserInterface {
 
 		Inventory inventory = ItemHelper.createInventory(27, Type.NOTIFICATION);
 
-		ItemStack test = ItemHelper.createItem(Material.RAW_FISH, ChatColor.GOLD + "お知らせっ！", ChatColor.GRAY + "クリックでポップアップを表示");
+		ItemStack test = ItemHelper.createItem(Material.RAW_FISH, ChatColor.GOLD + "TIP！", ChatColor.GRAY + "/g コマンドで便利なGUIを表示するよ！");
 
 		inventory.setItem(1, test);
 
@@ -66,11 +64,6 @@ public class Notification implements GraphicalUserInterface {
 
 	public void action(Player player, int slotNumber){
 		switch(slotNumber){
-		case 1:
-			GUIListener.getListener().getGUIManager(player).close();
-
-			Util.success(ChatColor.GOLD + "ポップアップ", ChatColor.GRAY + "説明文", Material.RAW_FISH, player);
-			break;
 		default:
 			break;
 		}

@@ -14,7 +14,7 @@ public class Message {
 	public static final String FAILED = ChatColor.RED + "失敗 | ";
 	public static final String WARN = ChatColor.RED + "警告 | ";
 
-	public static final String CAN_NOT_USE_THIS_FUNCATION = ChatColor.GRAY + "このサーバーでは使用出来ません。";
+	public static final String CAN_NOT_USE_THIS_FUNCATION = ChatColor.GRAY + "ここでは使用出来ません。";
 
 	public static final String IS_MIN_VALUE = ChatColor.GRAY + "これ以上削除出来ません。";
 	public static final String IS_MAX_VALUE = ChatColor.GRAY + "これ以上入力出来ません。";

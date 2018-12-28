@@ -197,7 +197,7 @@ public class GUIListener implements Listener {
 
 		Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
 
-		TextComponent component = new TextComponent(ChatColor.LIGHT_PURPLE + name + "さんが投票しました！");
+		TextComponent component = new TextComponent(ChatColor.GREEN + name + "さんが投票しました！" + ChatColor.GRAY + "(チケット50枚ゲット！)");
 		component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://minecraft.jp/servers/azisaba.net/vote"));
 		component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.GRAY + "クリックすると投票ページへ飛びます！").create()));
 

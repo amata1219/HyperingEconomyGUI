@@ -101,7 +101,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 						@Override
 						public void run(){
-							player.sendMessage(ChatColor.GRAY + "> " + ranking.getRank(uuid) + "位: " + player.getName() + " SCORE: " + ranking.getTotalAssets(uuid));
+							player.sendMessage(ChatColor.GRAY + " > " + ranking.getRank(uuid) + "位: " + player.getName() + " SCORE: " + ranking.getTotalAssets(uuid));
 						}
 
 					}.runTaskLater(HyperingEconomyGUI.getPlugin(), 48);
@@ -174,7 +174,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 						@Override
 						public void run(){
-							player.sendMessage(ChatColor.GRAY + "> " + ranking.getRank(uuid) + "位: " + player.getName() + " SCORE: " + ranking.getTotalAssets(uuid));
+							player.sendMessage(ChatColor.GRAY + " > " + ranking.getRank(uuid) + "位: " + player.getName() + " SCORE: " + ranking.getTotalAssets(uuid));
 						}
 
 					}.runTaskLater(HyperingEconomyGUI.getPlugin(), 48);
@@ -230,24 +230,6 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 		Location loc = player.getLocation().clone();
 
-		//AtomicInteger count = new AtomicInteger(0);
-
-		/*new BukkitRunnable(){
-
-			@Override
-			public void run(){
-
-				if(count.get() < 6)
-					slideYaw(player, loc, 10);
-				else if(count.get() > 18)
-					slideYaw(player, loc, -10);
-
-				if(count.incrementAndGet() > 24)
-					cancel();
-			}
-
-		}.runTaskTimer(this, 0, 2);*/
-
 		int mx = loc.getBlockX() - 5, my = loc.getBlockY(), mz = loc.getBlockZ() - 5;
 
 		for(int x = loc.getBlockX() + 5; x >= mx; x--){
@@ -262,7 +244,8 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 			}
 		}
 
-		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "You looked around…"));
+		player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 2F, 0F);
+		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GRAY + "あなたは辺りを見回した…"));
 
 		new BukkitRunnable(){
 
