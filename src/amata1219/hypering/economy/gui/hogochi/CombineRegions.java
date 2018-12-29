@@ -140,10 +140,7 @@ public class CombineRegions implements GraphicalUserInterface {
 
 		ItemStack item = inventory.getItem(slotNumber);
 		if(ItemHelper.isMatchColor(item, Color.RED)){
-			if(!manager.isCooldown()){
-				Util.error(Message.FAILED + Message.caseToString(Case.COMBINE_HOGOCHIES), Message.THIS_HOGOCHI_IS_STANDARD, Util.caseToMaterial(Case.COMBINE_HOGOCHIES), manager.getPlayer());
-				manager.setCooldown(50);
-			}
+			Util.error(Message.FAILED + Message.caseToString(Case.COMBINE_HOGOCHIES), Message.THIS_HOGOCHI_IS_STANDARD, Util.caseToMaterial(Case.COMBINE_HOGOCHIES), manager.getPlayer());
 			return;
 		}
 

@@ -131,7 +131,7 @@ public class GUIManager {
 	public void setCooldown(long time){
 		cooldown = true;
 
-		new BukkitRunnable(){
+	new BukkitRunnable(){
 
 			@Override
 			public void run(){
