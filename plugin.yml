@@ -8,6 +8,7 @@ commands:
   g:
     description: main command.
     usage: /<command>
+    aliases: gui
     permission: hypering.economy.gui.g
     permission-message: You do not have permission(<permission>).
   d:

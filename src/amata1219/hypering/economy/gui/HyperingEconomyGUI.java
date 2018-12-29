@@ -76,7 +76,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 				GUIListener.getListener().getTotalAssetsRanking().apply();
 
-				if(updateCount < 3)
+				if(updateCount < 6)
 					return;
 
 				updateCount = 0;
