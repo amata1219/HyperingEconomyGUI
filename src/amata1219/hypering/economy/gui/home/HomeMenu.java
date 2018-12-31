@@ -52,7 +52,7 @@ public class HomeMenu implements GraphicalUserInterface {
 
 		ItemStack cash = ItemHelper.createItem(Material.MINECART, ChatColor.GOLD + "チケットを換金する", ChatColor.GRAY + "・枚数を指定します");
 
-		ItemStack ranking = ItemHelper.createItem(Material.BLAZE_POWDER, ChatColor.GOLD + "所持金ランキング", ChatColor.GRAY + "");
+		ItemStack ranking = ItemHelper.createItem(Material.BLAZE_POWDER, ChatColor.GOLD + "総資産ランキング", ChatColor.GRAY + "");
 
 		ItemStack auction = ItemHelper.createItem(Material.ANVIL, ChatColor.GOLD + "オークションメニュー", ChatColor.GRAY + "・オークションメニューに移動します。");
 
