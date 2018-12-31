@@ -7,8 +7,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import amata1219.hypering.economy.Database;
 import amata1219.hypering.economy.HyperingEconomyAPI;
+import amata1219.hypering.economy.SQL;
 import amata1219.hypering.economy.gui.HyperingEconomyGUI;
 import amata1219.hypering.economy.gui.util.ItemHelper;
 import amata1219.hypering.economy.gui.util.TotalAssetsRanking;
@@ -63,7 +63,7 @@ public class TotalAssetsRankingTable implements GraphicalUserInterface {
 	}
 
 	public void apply(){
-		HyperingEconomyAPI api = Database.getHyperingEconomyAPI();
+		HyperingEconomyAPI api = SQL.getSQL().getHyperingEconomyAPI();
 		TotalAssetsRanking ranking = HyperingEconomyGUI.getTotalAssetsRanking();
 
 		long size = api.existSize();

@@ -12,10 +12,8 @@ import java.util.UUID;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import amata1219.hypering.economy.Database;
-import amata1219.hypering.economy.ServerName;
+import amata1219.hypering.economy.SQL;
 import amata1219.hypering.economy.gui.HyperingEconomyGUI;
-import amata1219.hypering.economy.spigot.Electron;
 
 public class TotalAssetsRanking {
 
@@ -26,25 +24,26 @@ public class TotalAssetsRanking {
 
 	}
 
-	public static TotalAssetsRanking load(ServerName serverName){
+	public static TotalAssetsRanking load(){
 		TotalAssetsRanking ranking = new TotalAssetsRanking();
-
-		String columnIndex = serverName.name().toLowerCase();
 
 		List<UUID> uuids = new ArrayList<>();
 		List<Long> assets = new ArrayList<>();
-		long price = Database.getHyperingEconomyAPI().getTicketPrice(serverName);
-		try(Connection con = Database.getHikariDataSource().getConnection();
-				PreparedStatement statement = con.prepareStatement("SELECT uuid, " + columnIndex + " FROM " + Database.getDatabaseName() + "." + Database.getPlayerDataTableName())){
+
+		SQL sql = SQL.getSQL();
+
+		long price = sql.getHyperingEconomyAPI().getTicketPrice();
+		try(Connection con = sql.getSource().getConnection();
+				PreparedStatement statement = con.prepareStatement("SELECT uuid, " + sql.name + " FROM HyperingEconomyDatabase.playerdata")){
 			try(ResultSet result = statement.executeQuery()){
 				while(result.next()){
 					UUID uuid = UUID.fromString(result.getString("uuid"));
 					uuids.add(uuid);
-					assets.add(calc(result.getLong(columnIndex), price, uuid));
+					assets.add(calc(result.getLong(sql.name), price, uuid));
 				}
-
 				result.close();
 			}
+			statement.close();
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -60,7 +59,7 @@ public class TotalAssetsRanking {
 	}
 
 	public static long calc(long money, long price, UUID uuid){
-		return money + Database.getHyperingEconomyAPI().getTicketsValue(Electron.getServerName(), uuid) + HyperingEconomyGUI.getMainFlatRegionCount(uuid) * 250 * price + HyperingEconomyGUI.getBonusBlocks(uuid) * 100;
+		return money + SQL.getSQL().getHyperingEconomyAPI().getTicketsValue(uuid) + HyperingEconomyGUI.getMainFlatRegionCount(uuid) * 250 * price + HyperingEconomyGUI.getBonusBlocks(uuid) * 100;
 	}
 
 	public int size(){

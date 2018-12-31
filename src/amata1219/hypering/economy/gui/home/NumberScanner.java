@@ -9,15 +9,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import amata1219.hypering.economy.Database;
 import amata1219.hypering.economy.HyperingEconomyAPI;
-import amata1219.hypering.economy.ServerName;
+import amata1219.hypering.economy.SQL;
 import amata1219.hypering.economy.gui.util.Case;
 import amata1219.hypering.economy.gui.util.ItemHelper;
 import amata1219.hypering.economy.gui.util.Message;
 import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
-import amata1219.hypering.economy.spigot.Electron;
 
 public class NumberScanner implements GraphicalUserInterface {
 
@@ -152,8 +150,7 @@ public class NumberScanner implements GraphicalUserInterface {
 			return;
 		}
 
-		HyperingEconomyAPI api = Database.getHyperingEconomyAPI();
-		ServerName serverName = Electron.getServerName();
+		HyperingEconomyAPI api = SQL.getSQL().getHyperingEconomyAPI();
 
 		UUID uuid = manager.getUniqueId();
 
@@ -166,7 +163,7 @@ public class NumberScanner implements GraphicalUserInterface {
 				break;
 			}
 
-			if(!api.hasMoney(serverName, uuid, result)){
+			if(!api.hasMoney(uuid, result)){
 				Util.warn(Message.WARN + Message.caseToString(cs), Message.NOT_ENOUGH_POSSESSION_MONEY, Util.caseToMaterial(cs), player);
 				return;
 			}
@@ -181,7 +178,7 @@ public class NumberScanner implements GraphicalUserInterface {
 				break;
 			}
 
-			if(!api.canBuyTickets(serverName, uuid, result)){
+			if(!api.canBuyTickets(uuid, result)){
 				Util.warn(Message.WARN + Message.caseToString(cs), Message.NOT_ENOUGH_POSSESSION_MONEY, Util.caseToMaterial(cs), player);
 				return;
 			}

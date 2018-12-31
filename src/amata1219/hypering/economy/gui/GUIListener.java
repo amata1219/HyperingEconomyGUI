@@ -41,7 +41,7 @@ import com.vexsoftware.votifier.model.VotifierEvent;
 import amata1219.hogochi.byebye.ClaimByebye;
 import amata1219.hogochi.byebye.ClaimDeletedEvent;
 import amata1219.hogochi.byebye.RegionByebye;
-import amata1219.hypering.economy.Database;
+import amata1219.hypering.economy.SQL;
 import amata1219.hypering.economy.gui.hogochi.HogochiMenu;
 import amata1219.hypering.economy.gui.home.GUIManager;
 import amata1219.hypering.economy.gui.home.Notification;
@@ -53,7 +53,7 @@ import amata1219.hypering.economy.gui.util.TotalAssetsRanking;
 import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
 import amata1219.hypering.economy.spigot.CollectedEvent;
-import amata1219.hypering.economy.spigot.Electron;
+import amata1219.hypering.economy.spigot.HyperingEconomy;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -79,7 +79,7 @@ public class GUIListener implements Listener {
 		listener.notification = Notification.load();
 		listener.playerList = PlayerList.load();
 
-		if(Electron.isEconomyEnable())
+		if(HyperingEconomy.isEconomyEnable())
 			listener.totalAssetsRanking = TotalAssetsRankingTable.load();
 	}
 
@@ -108,14 +108,14 @@ public class GUIListener implements Listener {
 
 		managers.put(player.getUniqueId(), manager);
 
-		if(Electron.isEconomyEnable())
+		if(HyperingEconomy.isEconomyEnable())
 			playerList.addPlayer(player);
 	}
 
 	public void unloadPlayerData(Player player){
 		managers.remove(player.getUniqueId());
 
-		if(Electron.isEconomyEnable())
+		if(HyperingEconomy.isEconomyEnable())
 			playerList.removePlayer(player);
 	}
 
@@ -189,11 +189,11 @@ public class GUIListener implements Listener {
 			return;
 		}
 
-		Database.getHyperingEconomyAPI().addTickets(player.getUniqueId(), 50);
+		vote(player.getUniqueId(), name);
 	}
 
 	public void vote(UUID uuid, String name){
-		Database.getHyperingEconomyAPI().addTickets(uuid, 50);
+		SQL.getSQL().getHyperingEconomyAPI().addTickets(uuid, 50);
 
 		Util.broadcast(Sound.ENTITY_PLAYER_LEVELUP);
 

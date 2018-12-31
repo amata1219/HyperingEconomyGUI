@@ -9,9 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import amata1219.hypering.economy.Database;
 import amata1219.hypering.economy.HyperingEconomyAPI;
-import amata1219.hypering.economy.ServerName;
+import amata1219.hypering.economy.SQL;
 import amata1219.hypering.economy.gui.GUIListener;
 import amata1219.hypering.economy.gui.HyperingEconomyGUI;
 import amata1219.hypering.economy.gui.util.Case;
@@ -21,7 +20,7 @@ import amata1219.hypering.economy.gui.util.Meta;
 import amata1219.hypering.economy.gui.util.TotalAssetsRanking;
 import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
-import amata1219.hypering.economy.spigot.Electron;
+import amata1219.hypering.economy.spigot.HyperingEconomy;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -56,7 +55,7 @@ public class HomeMenu implements GraphicalUserInterface {
 
 		ItemStack auction = ItemHelper.createItem(Material.ANVIL, ChatColor.GOLD + "オークションメニュー", ChatColor.GRAY + "・オークションメニューに移動します。");
 
-		ItemStack economy = ItemHelper.createItem(Electron.isEconomyEnable() ? Material.RAW_FISH : Material.COOKED_FISH, Electron.isEconomyEnable() ? ChatColor.GOLD + "ﾟ｡+━ヾ((○*>∀<*))ﾉﾞ━+｡ﾟ ＜チケットとお金が有効なのん！" : ChatColor.GOLD + "･ﾟ･(｡>ω<｡)･ﾟ･ ＜チケットは有効だけどお金は無効なのん…", ChatColor.GRAY + "");
+		ItemStack economy = ItemHelper.createItem(HyperingEconomy.isEconomyEnable() ? Material.RAW_FISH : Material.COOKED_FISH, HyperingEconomy.isEconomyEnable() ? ChatColor.GOLD + "ﾟ｡+━ヾ((○*>∀<*))ﾉﾞ━+｡ﾟ ＜チケットとお金が有効なのん！" : ChatColor.GOLD + "･ﾟ･(｡>ω<｡)･ﾟ･ ＜チケットは有効だけどお金は無効なのん…", ChatColor.GRAY + "");
 
 		ItemStack vote = ItemHelper.createItem(Material.DIAMOND, ChatColor.GOLD + "(● ˃̶͈̀∀˂̶͈́)੭ु⁾⁾ ＜アジ鯖に投票するのん！", ChatColor.GRAY + "");
 
@@ -103,22 +102,21 @@ public class HomeMenu implements GraphicalUserInterface {
 
 		UUID uuid = manager.getUniqueId();
 
-		HyperingEconomyAPI api = Database.getHyperingEconomyAPI();
-		ServerName serverName = Electron.getServerName();
+		HyperingEconomyAPI api = SQL.getSQL().getHyperingEconomyAPI();
 
 		ItemHelper.addLore(status, ChatColor.GRAY + "チケット: " + api.getTickets(uuid) + "枚");
 
-		if(Electron.isEconomyEnable()){
+		if(HyperingEconomy.isEconomyEnable()){
 			TotalAssetsRanking ranking = HyperingEconomyGUI.getTotalAssetsRanking();
 
-			long money = api.getMoney(serverName, uuid);
+			long money = api.getMoney(uuid);
 			ItemHelper.addLore(status, ChatColor.GRAY + "所持金: ¥" + money);
 
 			ItemHelper.addLore(status, ChatColor.GRAY + "");
 
 			ItemHelper.addLore(status, ChatColor.GRAY + "総資産:");
 			ItemHelper.addLore(status, ChatColor.GRAY + "  順位: " + ranking.getRank(uuid));
-			ItemHelper.addLore(status, ChatColor.GRAY + "  SCORE: " + TotalAssetsRanking.calc(money, api.getTicketPrice(serverName), uuid));
+			ItemHelper.addLore(status, ChatColor.GRAY + "  SCORE: " + TotalAssetsRanking.calc(money, api.getTicketPrice(), uuid));
 		}
 
 		String worldName = manager.getPlayer().getWorld().getName();
@@ -141,7 +139,7 @@ public class HomeMenu implements GraphicalUserInterface {
 
 	@Override
 	public void push(int slotNumber) {
-		if(!Electron.isEconomyEnable()){
+		if(!HyperingEconomy.isEconomyEnable()){
 			if(slotNumber == 3 || slotNumber == 4 || slotNumber == 5 || slotNumber == 6 || slotNumber == 7 || slotNumber == 14){
 				Util.error(Message.WARN + "ホームメニュー", Message.CAN_NOT_USE_THIS_FUNCATION, Material.RAW_FISH, manager.getPlayer());
 				return;

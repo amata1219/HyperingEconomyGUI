@@ -33,7 +33,6 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import amata1219.hypering.economy.gui.util.TotalAssetsRanking;
 import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
-import amata1219.hypering.economy.spigot.Electron;
 import amata1219.hypering.economy.spigot.VaultEconomy;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
@@ -64,7 +63,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 
 		GUIListener.load();
 
-		ranking = TotalAssetsRanking.load(Electron.getServerName());
+		ranking = TotalAssetsRanking.load();
 
 		rankingUpdater = new BukkitRunnable(){
 
@@ -72,7 +71,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 			public void run(){
 				updateCount++;
 
-				ranking = TotalAssetsRanking.load(Electron.getServerName());
+				ranking = TotalAssetsRanking.load();
 
 				GUIListener.getListener().getTotalAssetsRanking().apply();
 

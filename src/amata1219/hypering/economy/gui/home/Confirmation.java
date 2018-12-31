@@ -20,9 +20,8 @@ import amata1219.hogochi.byebye.IdType;
 import amata1219.hogochi.byebye.Point;
 import amata1219.hogochi.byebye.Region;
 import amata1219.hogochi.byebye.RegionByebye;
-import amata1219.hypering.economy.Database;
 import amata1219.hypering.economy.HyperingEconomyAPI;
-import amata1219.hypering.economy.ServerName;
+import amata1219.hypering.economy.SQL;
 import amata1219.hypering.economy.gui.GUIListener;
 import amata1219.hypering.economy.gui.HyperingEconomyGUI;
 import amata1219.hypering.economy.gui.hogochi.CombineRegions;
@@ -32,7 +31,6 @@ import amata1219.hypering.economy.gui.util.ItemHelper;
 import amata1219.hypering.economy.gui.util.Message;
 import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
-import amata1219.hypering.economy.spigot.Electron;
 import me.ryanhamshire.GriefPrevention.Claim;
 
 public class Confirmation implements GraphicalUserInterface {
@@ -152,8 +150,7 @@ public class Confirmation implements GraphicalUserInterface {
 			}
 		}
 
-		HyperingEconomyAPI api = Database.getHyperingEconomyAPI();
-		ServerName serverName = Electron.getServerName();
+		HyperingEconomyAPI api = SQL.getSQL().getHyperingEconomyAPI();
 
 		UUID uuid = manager.getUniqueId();
 
@@ -164,7 +161,7 @@ public class Confirmation implements GraphicalUserInterface {
 
 				long number1 = (long) manager.memory.get(0);
 
-				api.getMoneyEditer(serverName, uuid).send(sendTo.getUniqueId(), number1);
+				api.sendMoney(uuid, sendTo.getUniqueId(), number1);
 
 				manager.close();
 
@@ -176,7 +173,7 @@ public class Confirmation implements GraphicalUserInterface {
 			case BUY_TICKET:
 				int number2 = Long.valueOf((long) manager.memory.get(0)).intValue();
 
-				api.buyTickets(serverName, uuid, number2);
+				api.buyTickets(uuid, number2);
 
 				manager.close();
 
@@ -185,7 +182,7 @@ public class Confirmation implements GraphicalUserInterface {
 			case CASH_TICKET:
 				long number3 = (long) manager.memory.get(0);
 
-				api.cashTickets(serverName, uuid, number3);
+				api.cashTickets(uuid, number3);
 
 				manager.close();
 
@@ -195,7 +192,7 @@ public class Confirmation implements GraphicalUserInterface {
 				if(manager.memory.containsKey(5)){
 					long price = (long) manager.memory.get(5);
 
-					if(!api.hasMoney(serverName, uuid, price)){
+					if(!api.hasMoney(uuid, price)){
 						Util.warn(Message.WARN + Message.caseToString(manager.getCase()), Message.NOT_ENOUGH_POSSESSION_MONEY, Util.caseToMaterial(cs), player);
 						break;
 					}
@@ -211,8 +208,7 @@ public class Confirmation implements GraphicalUserInterface {
 							}
 						});
 
-						api.getMoneyEditer(serverName, uuid).remove(price);
-						api.getMoneyEditer(serverName, target = claim.ownerID).add(price);
+						api.sendMoney(uuid, target = claim.ownerID, price);
 
 						ClaimByebye.buy(player, claim);
 
@@ -226,8 +222,7 @@ public class Confirmation implements GraphicalUserInterface {
 							}
 						});
 
-						api.getMoneyEditer(serverName, uuid).remove(price);
-						api.getMoneyEditer(serverName, target = region.getOwners().getUniqueIds().iterator().next()).add(price);
+						api.sendMoney(target = region.getOwners().getUniqueIds().iterator().next(), uuid, price);
 
 						RegionByebye.buy(player, region);
 
@@ -266,7 +261,7 @@ public class Confirmation implements GraphicalUserInterface {
 
 					RegionByebye.buy(player, region);
 
-					api.removeTickets(serverName, uuid, tickets);
+					api.removeTickets(uuid, tickets);
 
 					Util.success(Message.COMPLETED + Message.caseToString(Case.BUY_HOGOCHI), ChatColor.GRAY + "ID: " + ((String) manager.memory.get(4)) + "\nチケット: 160枚", Util.caseToMaterial(cs), player);
 
