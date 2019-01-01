@@ -46,7 +46,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 
 		ItemStack status = ItemHelper.createSkull(player, ChatColor.GOLD + player.getName(), (String[]) null);
 
-		ItemStack buy = ItemHelper.createItem(Material.BOOK_AND_QUILL, ChatColor.GOLD + "土地を購入する", ChatColor.GRAY + "");
+		ItemStack buy = ItemHelper.createItem(Material.WRITABLE_BOOK, ChatColor.GOLD + "土地を購入する", ChatColor.GRAY + "");
 
 		ItemStack sell = ItemHelper.createItem(Material.MAP, ChatColor.GOLD + "土地を販売する", ChatColor.GRAY + "・土地を選択します。", ChatColor.GRAY + "・販売価格を設定します。");
 
@@ -94,7 +94,7 @@ public class HogochiMenu implements GraphicalUserInterface {
 		if(isUseWorldGuard()){
 			ItemStack flatten = ItemHelper.createItem(Material.GRASS, ChatColor.GOLD + "土地を手放す", ChatColor.RED + "・建築物を全て削除し土地を手放します。", ChatColor.RED + "・この操作は元に戻せません。");
 
-			ItemStack combine = ItemHelper.createItem(Material.IRON_SPADE, ChatColor.GOLD + "土地を結合する", ChatColor.GRAY + "・選択した土地を基準に、結合する土地を選択します。", ChatColor.GRAY + "・一度に結合出来る保護は2つまでです。");
+			ItemStack combine = ItemHelper.createItem(Material.IRON_SHOVEL, ChatColor.GOLD + "土地を結合する", ChatColor.GRAY + "・選択した土地を基準に、結合する土地を選択します。", ChatColor.GRAY + "・一度に結合出来る保護は2つまでです。");
 
 			ItemStack split = ItemHelper.createItem(Material.IRON_AXE, ChatColor.GOLD + "土地を分割する", ChatColor.GRAY + "・選択した土地を分割します。", ChatColor.GRAY + "・最大サイズの保護はXZ軸のどちらに沿って分割するか選択出来ます。");
 
@@ -236,9 +236,9 @@ public class HogochiMenu implements GraphicalUserInterface {
 		manager.memory.put(4, region.getId());
 
 		if(RegionByebye.isAdminRegion(region)){
-			manager.memory.put(6, RegionByebye.STONE);
-			confirmation.setResult(ChatColor.GOLD + "確認 | 土地の購入 - ID: " + region.getId() + " チケット: " + RegionByebye.STONE + "枚");
-			Util.normal(Message.CONFIRM + Message.caseToString(Case.BUY_HOGOCHI), ChatColor.GRAY + "ID: " + region.getId() + " チケット: " + RegionByebye.STONE + "枚", Util.caseToMaterial(Case.BUY_HOGOCHI), player);
+			manager.memory.put(6, RegionByebye.DEFAULT_VALUE);
+			confirmation.setResult(ChatColor.GOLD + "確認 | 土地の購入 - ID: " + region.getId() + " チケット: " + RegionByebye.DEFAULT_VALUE + "枚");
+			Util.normal(Message.CONFIRM + Message.caseToString(Case.BUY_HOGOCHI), ChatColor.GRAY + "ID: " + region.getId() + " チケット: " + RegionByebye.DEFAULT_VALUE + "枚", Util.caseToMaterial(Case.BUY_HOGOCHI), player);
 		}else{
 			manager.memory.put(5, RegionByebye.getPrice(region));
 			confirmation.setResult(ChatColor.GOLD + "確認 | 土地の購入 - ID: " + region.getId() + " ¥" + RegionByebye.getPrice(region));

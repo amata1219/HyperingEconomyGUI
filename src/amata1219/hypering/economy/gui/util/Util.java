@@ -1,26 +1,21 @@
 package amata1219.hypering.economy.gui.util;
 
 import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import amata1219.hogochi.byebye.RegionByebye;
 import amata1219.hypering.economy.gui.GUIListener;
 import amata1219.hypering.economy.gui.HyperingEconomyGUI;
 import amata1219.hypering.economy.gui.home.GUIManager;
-import amata1219.hypering.economy.gui.util.AdvancementAPI.FrameType;
 
 public class Util {
 
@@ -94,7 +89,7 @@ public class Util {
 	}
 
 	public static void success(String message, Material material, Player player){
-		display(message, toMaterialData(material), player);
+		display(message, material, player);
 		playSound(Effect.SUCCESS, player);
 	}
 
@@ -103,7 +98,7 @@ public class Util {
 	}
 
 	public static void normal(String message, Material material, Player player){
-		display(message, toMaterialData(material), player);
+		display(message, material, player);
 		playSound(Effect.NORMAL, player);
 	}
 
@@ -116,7 +111,7 @@ public class Util {
 		if(manager.isCooldown())
 			return;
 
-		display(message, toMaterialData(material), player);
+		display(message, material, player);
 		playSound(Effect.WARN, player);
 
 		manager.setCooldown(50);
@@ -131,7 +126,7 @@ public class Util {
 		if(manager.isCooldown())
 			return;
 
-		display(message, toMaterialData(material), player);
+		display(message, material, player);
 		playSound(Effect.ERROR, player);
 
 		manager.setCooldown(50);
@@ -152,7 +147,7 @@ public class Util {
 			sound = Sound.ENTITY_CHICKEN_EGG;
 			break;
 		case WARN:
-			sound = Sound.ENTITY_IRONGOLEM_HURT;
+			sound = Sound.ENTITY_IRON_GOLEM_HURT;
 			break;
 		case ERROR:
 			sound = Sound.BLOCK_ANVIL_PLACE;
@@ -165,7 +160,19 @@ public class Util {
 		player.playSound(player.getLocation(), sound, volume, pitch);
 	}
 
-	public static void display(String message, MaterialData material, Player player){
+	public static void display(String message, Material material, Player player){
+		Advancement advancement = new Advancement(material, message);
+		advancement.send(player, true);
+		new BukkitRunnable(){
+			@Override
+			public void run(){
+				advancement.send(player, false);
+				advancement.unload();
+			}
+		}.runTaskLater(HyperingEconomyGUI.getPlugin(), 50);
+	}
+
+	/*public static void display(String message, MaterialData material, Player player){
 		if(player == null)
 			return;
 
@@ -209,21 +216,21 @@ public class Util {
 			}
 		}, 50);
 
-	}
+	}*/
 
 	public static Material caseToMaterial(Case cs){
 		if(cs == null)
-			return Material.RAW_FISH;
+			return Material.SALMON;
 
 		switch(cs){
 		case SEND_MONEY:
-			return Material.BOOK_AND_QUILL;
+			return Material.WRITABLE_BOOK;
 		case BUY_TICKET:
-			return Material.STORAGE_MINECART;
+			return Material.CHEST_MINECART;
 		case CASH_TICKET:
 			return Material.MINECART;
 		case BUY_HOGOCHI:
-			return Material.BOOK_AND_QUILL;
+			return Material.WRITABLE_BOOK;
 		case SELL_HOGOCHI:
 			return Material.MAP;
 		case WITHDRAW_HOGOCHI_SALE:
@@ -233,17 +240,13 @@ public class Util {
 		case CONFIRMATION_FLATTEN_HOGOCHI:
 			return Material.GRASS;
 		case COMBINE_HOGOCHIES:
-			return Material.IRON_SPADE;
+			return Material.IRON_SHOVEL;
 		case SPLIT_HOGOCHI:
 			return Material.IRON_AXE;
 		default:
 			//到達しない
-			return Material.RAW_FISH;
+			return Material.SALMON;
 		}
-	}
-
-	public static MaterialData toMaterialData(Material material){
-		return new MaterialData(material);
 	}
 
 	public static int getCost(ProtectedRegion region){

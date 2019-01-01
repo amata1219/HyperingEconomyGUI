@@ -39,7 +39,7 @@ public class NumberScanner implements GraphicalUserInterface {
 
 		Inventory inventory = ItemHelper.createInventory(18, Type.NUMBER_SCANNER);
 
-		ItemStack result = ItemHelper.createItem(Material.BOOK_AND_QUILL, ChatColor.GOLD + "", ChatColor.GRAY + "ここに説明文");
+		ItemStack result = ItemHelper.createItem(Material.WRITABLE_BOOK, ChatColor.GOLD + "", ChatColor.GRAY + "ここに説明文");
 
 		ItemStack backSpace = ItemHelper.createSkull(ItemHelper.ARROW_LEFT, ChatColor.GOLD + "バックスペース", ChatColor.GRAY + "");
 
@@ -55,7 +55,7 @@ public class NumberScanner implements GraphicalUserInterface {
 
 		ItemStack enter = ItemHelper.createItem(Material.PAPER, ChatColor.GOLD + "エンター", ChatColor.GRAY + "");
 
-		ItemStack cancel = ItemHelper.createItem(Material.INK_SACK, 15, ChatColor.GOLD + "キャンセル", ChatColor.GRAY + "");
+		ItemStack cancel = ItemHelper.createItem(Material.BONE_MEAL, ChatColor.GOLD + "キャンセル", ChatColor.GRAY + "");
 
 		ItemStack five = ItemHelper.createSkull(ItemHelper.FIVE, ChatColor.GOLD + "5", ChatColor.GRAY + "");
 

@@ -49,13 +49,13 @@ public class Confirmation implements GraphicalUserInterface {
 
 		Inventory inventory = ItemHelper.createInventory(9, Type.CONFIRMATION);
 
-		ItemStack result = ItemHelper.createItem(Material.BOOK_AND_QUILL, ChatColor.GOLD + "", ChatColor.GRAY + "・確認事項が上に表示されます。");
+		ItemStack result = ItemHelper.createItem(Material.WRITABLE_BOOK, ChatColor.GOLD + "", ChatColor.GRAY + "・確認事項が上に表示されます。");
 
 		ItemStack backSpace = ItemHelper.createSkull(ItemHelper.ARROW_LEFT, ChatColor.GOLD + "一つ前のページに戻る", ChatColor.GRAY + "");
 
 		ItemStack enter = ItemHelper.createItem(Material.PAPER, ChatColor.GOLD + "エンター", ChatColor.GRAY + "");
 
-		ItemStack cancel = ItemHelper.createItem(Material.INK_SACK, 15, ChatColor.GOLD + "キャンセル", ChatColor.GRAY + "");
+		ItemStack cancel = ItemHelper.createItem(Material.BONE_MEAL, ChatColor.GOLD + "キャンセル", ChatColor.GRAY + "");
 
 		inventory.setItem(2, result);
 		inventory.setItem(3, backSpace);
@@ -177,7 +177,7 @@ public class Confirmation implements GraphicalUserInterface {
 
 				manager.close();
 
-				Util.success(Message.COMPLETED + Message.caseToString(Case.BUY_TICKET), ChatColor.GRAY + "チケット: " + number2 + "枚", Material.STORAGE_MINECART, player);
+				Util.success(Message.COMPLETED + Message.caseToString(Case.BUY_TICKET), ChatColor.GRAY + "チケット: " + number2 + "枚", Material.CHEST_MINECART, player);
 				break;
 			case CASH_TICKET:
 				long number3 = (long) manager.memory.get(0);
@@ -234,7 +234,7 @@ public class Confirmation implements GraphicalUserInterface {
 						return;
 
 					if(offPlayer.isOnline())
-						Util.success(Message.COMPLETED + Message.caseToString(Case.BUY_HOGOCHI), ChatColor.GRAY + "MCID: " + player.getName() + "\nID: " +  ((String) manager.memory.get(4)), Material.BOOK_AND_QUILL, offPlayer.getPlayer());
+						Util.success(Message.COMPLETED + Message.caseToString(Case.BUY_HOGOCHI), ChatColor.GRAY + "MCID: " + player.getName() + "\nID: " +  ((String) manager.memory.get(4)), Material.WRITABLE_BOOK, offPlayer.getPlayer());
 
 					manager.close();
 				}else{

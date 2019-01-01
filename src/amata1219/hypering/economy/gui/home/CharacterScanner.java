@@ -38,7 +38,7 @@ public class CharacterScanner implements GraphicalUserInterface {
 
 		Inventory inventory = ItemHelper.createInventory(45, Type.CHARACTER_SCANNER);
 
-		ItemStack result = ItemHelper.createItem(Material.BOOK_AND_QUILL, ChatColor.GOLD + "", ChatColor.GRAY + "ここに説明文");
+		ItemStack result = ItemHelper.createItem(Material.WRITABLE_BOOK, ChatColor.GOLD + "", ChatColor.GRAY + "ここに説明文");
 
 		ItemStack a = ItemHelper.createSkull(ItemHelper.A, ChatColor.GOLD + "A", ChatColor.GRAY + "");
 
@@ -56,10 +56,10 @@ public class CharacterScanner implements GraphicalUserInterface {
 
 		ItemStack h = ItemHelper.createSkull(ItemHelper.H ,ChatColor.GOLD + "H", ChatColor.GRAY + "");
 
-		ItemStack modeChanger = ItemHelper.createItem(Material.RAW_FISH, ChatColor.GOLD + "ﾟ｡+━ヾ((○*>∀<*))ﾉﾞ━+｡ﾟ ＜文字列入力機能が有効なのん！", ChatColor.GRAY + "");
+		ItemStack modeChanger = ItemHelper.createItem(Material.SALMON, ChatColor.GOLD + "ﾟ｡+━ヾ((○*>∀<*))ﾉﾞ━+｡ﾟ ＜文字列入力機能が有効なのん！", ChatColor.GRAY + "");
 
 		if(!scanner.stringInputMode){
-			modeChanger.setType(Material.COOKED_FISH);
+			modeChanger.setType(Material.COOKED_SALMON);
 			ItemHelper.changeDisplayName(modeChanger, ChatColor.GOLD + "･ﾟ･(｡>ω<｡)･ﾟ･ ＜文字列入力機能が無効なのん");
 		}
 
@@ -111,7 +111,7 @@ public class CharacterScanner implements GraphicalUserInterface {
 
 		ItemStack four = ItemHelper.createSkull(ItemHelper.FOUR ,ChatColor.GOLD + "4", ChatColor.GRAY + "");
 
-		ItemStack cancel = ItemHelper.createItem(Material.INK_SACK, 15, ChatColor.GOLD + "キャンセル", ChatColor.GRAY + "");
+		ItemStack cancel = ItemHelper.createItem(Material.BONE_MEAL, ChatColor.GOLD + "キャンセル", ChatColor.GRAY + "");
 
 		ItemStack five = ItemHelper.createSkull(ItemHelper.FIVE ,ChatColor.GOLD + "5", ChatColor.GRAY + "");
 

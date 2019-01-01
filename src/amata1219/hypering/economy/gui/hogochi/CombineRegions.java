@@ -43,11 +43,11 @@ public class CombineRegions implements GraphicalUserInterface {
 
 		Inventory inventory = ItemHelper.createInventory(18, Type.COMBINE_REGIONS);
 
-		ItemStack result = ItemHelper.createItem(Material.BOOK_AND_QUILL, ChatColor.GOLD + "", ChatColor.GRAY + "ここに説明文");
+		ItemStack result = ItemHelper.createItem(Material.WRITABLE_BOOK, ChatColor.GOLD + "", ChatColor.GRAY + "ここに説明文");
 
 		ItemStack enter = ItemHelper.createItem(Material.PAPER, ChatColor.GOLD + "エンター", ChatColor.GRAY + "");
 
-		ItemStack cancel = ItemHelper.createItem(Material.INK_SACK, 15, ChatColor.GOLD + "キャンセル", ChatColor.GRAY + "");
+		ItemStack cancel = ItemHelper.createItem(Material.BONE_MEAL, ChatColor.GOLD + "キャンセル", ChatColor.GRAY + "");
 
 		inventory.setItem(2, result);
 		inventory.setItem(5, ItemHelper.createColorWool(Color.LIGHT_GRAY, ChatColor.GOLD + ""));
@@ -150,7 +150,7 @@ public class CombineRegions implements GraphicalUserInterface {
 
 		ProtectedRegion pr = region.getProtectedRegion();
 
-		if(ItemHelper.isMatchColor(item, Color.YELLOW_GREEN)){
+		if(ItemHelper.isMatchColor(item, Color.LIME)){
 			for(Direction direction : cpm.getDirections(pr))
 				ItemHelper.changeWoolColor(inventory.getItem(table.getSlotNumber(direction)), Color.LIGHT_GRAY);
 
@@ -189,7 +189,7 @@ public class CombineRegions implements GraphicalUserInterface {
 			}
 
 			for(Direction direction : cpm.getDirections(pr))
-				ItemHelper.changeWoolColor(inventory.getItem(table.getSlotNumber(direction)), Color.YELLOW_GREEN);
+				ItemHelper.changeWoolColor(inventory.getItem(table.getSlotNumber(direction)), Color.LIME);
 
 
 		}
@@ -212,10 +212,10 @@ public class CombineRegions implements GraphicalUserInterface {
 	public boolean[] getResult(){
 		boolean[] args = new boolean[4];
 
-		args[0] = ItemHelper.isMatchColor(inventory.getItem(5), Color.RED, Color.YELLOW_GREEN);
-		args[1] = ItemHelper.isMatchColor(inventory.getItem(6), Color.RED, Color.YELLOW_GREEN);
-		args[2] = ItemHelper.isMatchColor(inventory.getItem(14), Color.RED, Color.YELLOW_GREEN);
-		args[3] = ItemHelper.isMatchColor(inventory.getItem(15), Color.RED, Color.YELLOW_GREEN);
+		args[0] = ItemHelper.isMatchColor(inventory.getItem(5), Color.RED, Color.LIME);
+		args[1] = ItemHelper.isMatchColor(inventory.getItem(6), Color.RED, Color.LIME);
+		args[2] = ItemHelper.isMatchColor(inventory.getItem(14), Color.RED, Color.LIME);
+		args[3] = ItemHelper.isMatchColor(inventory.getItem(15), Color.RED, Color.LIME);
 
 		return args;
 	}

@@ -85,6 +85,7 @@ public class ItemHelper {
 		return item;
 	}
 
+	@SuppressWarnings("deprecation")
 	public static ItemStack createItem(Material material, int data, String displayName, String... lore){
 		ItemStack item = new ItemStack(material);
 
@@ -105,7 +106,7 @@ public class ItemHelper {
 	}
 
 	public static ItemStack createSkull(){
-		return new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+		return new ItemStack(Material.PLAYER_HEAD);
 	}
 
 	public static ItemStack createSkull(String base64, String displayName, String... lore){
@@ -146,17 +147,11 @@ public class ItemHelper {
 	}
 
 	public static ItemStack createColorWool(Color color){
-		ItemStack item = new ItemStack(Material.WOOL);
-
-		item.setDurability(color.getData());
-
-		return item;
+		return new ItemStack(color.getMaterial());
 	}
 
 	public static ItemStack createColorWool(Color color, String displayName, String... lore){
-		ItemStack item = new ItemStack(Material.WOOL);
-
-		item.setDurability(color.getData());
+		ItemStack item = createColorWool(color);
 
 		setDisplayNameAndLore(item, displayName, lore);
 
@@ -165,7 +160,7 @@ public class ItemHelper {
 
 	public static boolean isMatchColor(ItemStack item, Color... colors){
 		for(Color color : colors){
-			if(item.getDurability() == color.getData())
+			if(item.getType() == color.getMaterial())
 				return true;
 		}
 
@@ -212,8 +207,8 @@ public class ItemHelper {
 	}
 
 	public static void changeWoolColor(ItemStack item, Color color){
-		if(item.getDurability() != color.getData())
-			item.setDurability(color.getData());
+		if(item.getType() != color.getMaterial())
+			item.setType(color.getMaterial());
 	}
 
 	public static void changeSkullOwner(ItemStack item, OfflinePlayer player){
@@ -271,68 +266,5 @@ public class ItemHelper {
 
 		item.setItemMeta(meta);
 	}
-
-	/*public static void displayErrorOnDisplayName(ItemStack item, int ticks, String error){
-		ItemMeta meta = item.getItemMeta();
-
-		String displayName = meta.getDisplayName();
-
-		meta.setDisplayName(error + "§e§r§r§o§r");
-		item.setItemMeta(meta);
-
-		new BukkitRunnable(){
-
-			@Override
-			public void run(){
-				meta.setDisplayName(displayName);
-				item.setItemMeta(meta);
-			}
-
-		}.runTaskLater(HyperingEconomyGUI.getPlugin(), ticks);
-	}
-
-	public static boolean isDisplayinErrorOnDisplayName(ItemStack item){
-		if(!item.hasItemMeta())
-			return false;
-
-		ItemMeta meta = item.getItemMeta();
-		if(!meta.hasDisplayName())
-			return false;
-
-		return meta.getDisplayName().endsWith("§e§r§r§o§r");
-	}
-
-	public static void displayErrorOnLore(ItemStack item, int ticks, String... error){
-		ItemMeta meta = item.getItemMeta();
-
-		List<String> lore = meta.getLore();
-
-		List<String> newLore = Arrays.stream(error).map(e -> e + "§e§r§r§o§r").collect(Collectors.toCollection(ArrayList::new));
-
-		meta.setLore(newLore);
-
-		item.setItemMeta(meta);
-
-		new BukkitRunnable(){
-
-			@Override
-			public void run(){
-				meta.setLore(lore);
-				item.setItemMeta(meta);
-			}
-
-		}.runTaskLater(HyperingEconomyGUI.getPlugin(), ticks);
-	}
-
-	public static boolean isDisplayingErrorOnLore(ItemStack item){
-		if(!item.hasItemMeta())
-			return false;
-
-		ItemMeta meta = item.getItemMeta();
-		if(!meta.hasLore())
-			return false;
-
-		return meta.getLore().stream().filter(lore -> lore.endsWith("§e§r§r§o§r")).count() > 0;
-	}*/
 
 }

@@ -22,7 +22,7 @@ public class Notification implements GraphicalUserInterface {
 
 		Inventory inventory = ItemHelper.createInventory(27, Type.NOTIFICATION);
 
-		ItemStack test = ItemHelper.createItem(Material.RAW_FISH, ChatColor.GOLD + "TIP！", ChatColor.GRAY + "/g コマンドで便利なGUIを表示するよ！");
+		ItemStack test = ItemHelper.createItem(Material.TROPICAL_FISH, ChatColor.GOLD + "TIP！", ChatColor.GRAY + "/g コマンドで便利なGUIを表示するよ！");
 
 		inventory.setItem(1, test);
 

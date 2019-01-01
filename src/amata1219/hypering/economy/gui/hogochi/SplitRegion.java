@@ -30,13 +30,13 @@ public class SplitRegion implements GraphicalUserInterface {
 
 		Inventory inventory = ItemHelper.createInventory(9, Type.SPLIT_REGION);
 
-		ItemStack result = ItemHelper.createItem(Material.BOOK_AND_QUILL, ChatColor.GOLD + "", ChatColor.GRAY + "ここに説明文");
+		ItemStack result = ItemHelper.createItem(Material.WRITABLE_BOOK, ChatColor.GOLD + "", ChatColor.GRAY + "ここに説明文");
 
 		ItemStack along = ItemHelper.createSkull(ItemHelper.ARROW_RIGHT, ChatColor.GOLD + "X軸に沿って分割する", ChatColor.GRAY + "");
 
 		ItemStack enter = ItemHelper.createItem(Material.PAPER, ChatColor.GOLD + "エンター", ChatColor.GRAY + "");
 
-		ItemStack cancel = ItemHelper.createItem(Material.INK_SACK, 15, ChatColor.GOLD + "キャンセル", ChatColor.GRAY + "");
+		ItemStack cancel = ItemHelper.createItem(Material.BONE_MEAL, ChatColor.GOLD + "キャンセル", ChatColor.GRAY + "");
 
 		inventory.setItem(2, result);
 		inventory.setItem(3, along);

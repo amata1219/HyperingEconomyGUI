@@ -45,9 +45,9 @@ public class HomeMenu implements GraphicalUserInterface {
 
 		ItemStack status = ItemHelper.createSkull(player, ChatColor.GOLD + player.getName(), (String[]) null);
 
-		ItemStack send = ItemHelper.createItem(Material.BOOK_AND_QUILL, ChatColor.GOLD + "お金を送る", ChatColor.GRAY + "・送金額を指定します。 ", ChatColor.GRAY + "・送金相手を指定します。");
+		ItemStack send = ItemHelper.createItem(Material.WRITABLE_BOOK, ChatColor.GOLD + "お金を送る", ChatColor.GRAY + "・送金額を指定します。 ", ChatColor.GRAY + "・送金相手を指定します。");
 
-		ItemStack buy = ItemHelper.createItem(Material.STORAGE_MINECART, ChatColor.GOLD + "チケットを購入する", ChatColor.GRAY + "・枚数を指定します。");
+		ItemStack buy = ItemHelper.createItem(Material.CHEST_MINECART, ChatColor.GOLD + "チケットを購入する", ChatColor.GRAY + "・枚数を指定します。");
 
 		ItemStack cash = ItemHelper.createItem(Material.MINECART, ChatColor.GOLD + "チケットを換金する", ChatColor.GRAY + "・枚数を指定します");
 
@@ -55,7 +55,7 @@ public class HomeMenu implements GraphicalUserInterface {
 
 		ItemStack auction = ItemHelper.createItem(Material.ANVIL, ChatColor.GOLD + "オークションメニュー", ChatColor.GRAY + "・オークションメニューに移動します。");
 
-		ItemStack economy = ItemHelper.createItem(HyperingEconomy.isEconomyEnable() ? Material.RAW_FISH : Material.COOKED_FISH, HyperingEconomy.isEconomyEnable() ? ChatColor.GOLD + "ﾟ｡+━ヾ((○*>∀<*))ﾉﾞ━+｡ﾟ ＜チケットとお金が有効なのん！" : ChatColor.GOLD + "･ﾟ･(｡>ω<｡)･ﾟ･ ＜チケットは有効だけどお金は無効なのん…", ChatColor.GRAY + "");
+		ItemStack economy = ItemHelper.createItem(HyperingEconomy.isEconomyEnable() ? Material.SALMON : Material.COOKED_SALMON, HyperingEconomy.isEconomyEnable() ? ChatColor.GOLD + "ﾟ｡+━ヾ((○*>∀<*))ﾉﾞ━+｡ﾟ ＜チケットとお金が有効なのん！" : ChatColor.GOLD + "･ﾟ･(｡>ω<｡)･ﾟ･ ＜チケットは有効だけどお金は無効なのん…", ChatColor.GRAY + "");
 
 		ItemStack vote = ItemHelper.createItem(Material.DIAMOND, ChatColor.GOLD + "(● ˃̶͈̀∀˂̶͈́)੭ु⁾⁾ ＜アジ鯖に投票するのん！", ChatColor.GRAY + "");
 
@@ -121,9 +121,9 @@ public class HomeMenu implements GraphicalUserInterface {
 
 		String worldName = manager.getPlayer().getWorld().getName();
 		if(worldName.equals("main") || worldName.equals("main_nether") || worldName.equals("main_end"))
-			inventory.getItem(14).setType(Material.GOLD_SPADE);
+			inventory.getItem(14).setType(Material.GOLDEN_SHOVEL);
 		else if(worldName.equals("main_flat"))
-			inventory.getItem(14).setType(Material.WOOD_AXE);
+			inventory.getItem(14).setType(Material.WOODEN_AXE);
 		else
 			inventory.getItem(14).setType(Material.STICK);
 
@@ -141,7 +141,7 @@ public class HomeMenu implements GraphicalUserInterface {
 	public void push(int slotNumber) {
 		if(!HyperingEconomy.isEconomyEnable()){
 			if(slotNumber == 3 || slotNumber == 4 || slotNumber == 5 || slotNumber == 6 || slotNumber == 7 || slotNumber == 14){
-				Util.error(Message.WARN + "ホームメニュー", Message.CAN_NOT_USE_THIS_FUNCATION, Material.RAW_FISH, manager.getPlayer());
+				Util.error(Message.WARN + "ホームメニュー", Message.CAN_NOT_USE_THIS_FUNCATION, Material.SALMON, manager.getPlayer());
 				return;
 			}
 		}
@@ -186,7 +186,7 @@ public class HomeMenu implements GraphicalUserInterface {
 
 			manager.getPlayer().spigot().sendMessage(ChatMessageType.CHAT, component);
 
-			Util.success(Message.VOTE_ON_JPMCS, Material.RAW_FISH, manager.getPlayer());
+			Util.success(Message.VOTE_ON_JPMCS, Material.SALMON, manager.getPlayer());
 
 			manager.hide();
 			break;
@@ -197,7 +197,7 @@ public class HomeMenu implements GraphicalUserInterface {
 		case 14:
 			String worldName = manager.getPlayer().getWorld().getName();
 			if(!worldName.equals("main") && !worldName.equals("main_nether") && !worldName.equals("main_end") && !worldName.equals("main_flat")){
-				Util.error(Message.WARN + "ホームメニュー", Message.CAN_NOT_USE_THIS_FUNCATION, Material.RAW_FISH, manager.getPlayer());
+				Util.error(Message.WARN + "ホームメニュー", Message.CAN_NOT_USE_THIS_FUNCATION, Material.SALMON, manager.getPlayer());
 				return;
 			}
 

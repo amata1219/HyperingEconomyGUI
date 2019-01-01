@@ -30,7 +30,7 @@ public class TotalAssetsRankingTable implements GraphicalUserInterface {
 		for(int i = 0; i <= 52; i++)
 			inventory.setItem(i, ItemHelper.createVanillaSkull());
 
-		ItemStack info = ItemHelper.createItem(Material.RAW_FISH, ChatColor.GOLD + "", ChatColor.GRAY + "・スコアは総資産を自動評価したものです。");
+		ItemStack info = ItemHelper.createItem(Material.TROPICAL_FISH, ChatColor.GOLD + "", ChatColor.GRAY + "・スコアは総資産を自動評価したものです。");
 
 		inventory.setItem(53, info);
 

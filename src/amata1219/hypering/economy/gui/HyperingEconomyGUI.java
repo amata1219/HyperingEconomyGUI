@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -26,6 +25,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -334,7 +334,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 	public static int getMainFlatRegionCount(UUID uuid){
 		int count = 0;
 
-		for(ProtectedRegion region : getRegionManager().getRegions().values()){
+		for(ProtectedRegion region : WorldGuard.getInstance().getPlatform().getRegionContainer().get(amata1219.hogochi.byebye.Util.getMainFlat()).getRegions().values()){
 			if(!region.getOwners().contains(uuid))
 				continue;
 
@@ -353,7 +353,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 	}
 
 	public static RegionManager getRegionManager(){
-		return worldGuard.getRegionManager(Bukkit.getWorld("main_flat"));
+		return WorldGuard.getInstance().getPlatform().getRegionContainer().get(amata1219.hogochi.byebye.Util.getMainFlat());
 	}
 
 }

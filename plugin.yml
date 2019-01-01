@@ -1,6 +1,7 @@
 name: HyperingEconomyGUI
 main: amata1219.hypering.economy.gui.HyperingEconomyGUI
 version: 1.0.0
+api-version: 1.13
 depend: [HyperingEconomy, HogochiByebye, Votifier, CrazyAuctions]
 author: amata1219(Twitter@amata1219)
 
