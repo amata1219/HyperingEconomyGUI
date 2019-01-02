@@ -30,10 +30,10 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
+import amata1219.hypering.economy.SQL;
 import amata1219.hypering.economy.gui.util.TotalAssetsRanking;
 import amata1219.hypering.economy.gui.util.Type;
 import amata1219.hypering.economy.gui.util.Util;
-import amata1219.hypering.economy.spigot.VaultEconomy;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.md_5.bungee.api.ChatMessageType;
@@ -180,7 +180,7 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 				}
 				return true;
 			}else if(args[0].equalsIgnoreCase("kasegibito")){
-				HashMap<UUID, Long> map = VaultEconomy.map;
+				HashMap<UUID, Long> map = SQL.map;
 
 				List<UUID> uuids = new ArrayList<>(map.keySet());
 				List<Long> money = new ArrayList<>(map.values());
@@ -254,18 +254,6 @@ public class HyperingEconomyGUI extends JavaPlugin implements CommandExecutor {
 			}
 
 		}.runTaskLater(this, 100);
-	}
-
-	public void slideYaw(Player player, Location loc, float sliding){
-		float pitch = loc.getPitch() + sliding;
-		if(pitch > 180)
-			pitch = 180 - pitch;
-		else if(pitch <= -180)
-			pitch = -(pitch + 180);
-
-		loc.setPitch(pitch);
-
-		player.teleport(loc);
 	}
 
 	private Plugin getPlugin(String pluginName){

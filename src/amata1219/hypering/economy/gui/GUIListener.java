@@ -1,9 +1,7 @@
 package amata1219.hypering.economy.gui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -13,17 +11,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -32,7 +24,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.vexsoftware.votifier.model.Vote;
@@ -203,96 +194,6 @@ public class GUIListener implements Listener {
 
 		for(Player player : Bukkit.getOnlinePlayers())
 			player.spigot().sendMessage(component);
-	}
-
-	private final List<EntityType> enemies = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(EntityType.ZOMBIE
-			, EntityType.SKELETON, EntityType.CREEPER, EntityType.WITCH, EntityType.ENDERMAN, EntityType.HUSK, EntityType.STRAY
-			, EntityType.PIG_ZOMBIE, EntityType.SPIDER, EntityType.BLAZE, EntityType.WITHER_SKELETON, EntityType.SQUID
-			, EntityType.GUARDIAN, EntityType.MAGMA_CUBE, EntityType.SLIME)));
-
-	@EventHandler
-	public void onSpawn(CreatureSpawnEvent e){
-		LivingEntity entity = e.getEntity();
-		SpawnReason reason = e.getSpawnReason();
-		if(reason == SpawnReason.SPAWNER){
-			applyMeta(entity);
-			return;
-		}
-
-		FileConfiguration config = HyperingEconomyGUI.getPlugin().getConfig();
-		int count = 0;
-
-		switch(entity.getType()){
-		case ZOMBIE:
-		case SKELETON:
-		case HUSK:
-		case STRAY:
-		case CREEPER:
-		case SPIDER:
-		case WITCH:
-		case WITHER_SKELETON:
-		case SQUID:
-		case BLAZE:
-		case MAGMA_CUBE:
-		case ZOMBIE_VILLAGER:
-		case BAT:
-		case ENDERMITE:
-			for(Entity ent : entity.getNearbyEntities(16, 16, 16)){
-				if(enemies.contains(ent.getType()))
-					count++;
-			}
-
-			if(count > config.getInt("UpperLimit.Normal"))
-				applyMeta(entity);
-			return;
-		case SLIME:
-			if(entity.getLocation().getBlockY() > 40)
-				return;
-
-			for(Entity ent : entity.getNearbyEntities(12, 48, 12)){
-				if(ent.getType() == EntityType.SLIME)
-					count++;
-			}
-
-			if(count > config.getInt("UpperLimit.Slime"))
-				applyMeta(entity);
-			return;
-		case GUARDIAN:
-			for(Entity ent : entity.getNearbyEntities(38, 38, 38)){
-				if(ent.getType() == EntityType.SLIME)
-					count++;
-			}
-
-			if(count > config.getInt("UpperLimit.Guardian"))
-				applyMeta(entity);
-			return;
-		case PIG_ZOMBIE:
-			if(reason == SpawnReason.NETHER_PORTAL){
-				for(Entity ent : entity.getNearbyEntities(32, 1, 32)){
-					if(ent.getType() == EntityType.SLIME)
-						count++;
-				}
-
-				if(count > config.getInt("UpperLimit.Pigman"))
-					applyMeta(entity);
-				return;
-			}
-
-			for(Entity ent : entity.getNearbyEntities(16, 16, 16)){
-				if(enemies.contains(ent.getType()))
-					count++;
-			}
-
-			if(count > config.getInt("UpperLimit.Normal"))
-				applyMeta(entity);
-			return;
-		default:
-			return;
-		}
-	}
-
-	private void applyMeta(LivingEntity entity){
-		entity.setMetadata("HyperingEconomy:MobKill", new FixedMetadataValue(HyperingEconomyGUI.getPlugin(), this));
 	}
 
 	@EventHandler
