@@ -221,7 +221,7 @@ public class GUIListener implements Listener {
 			return;
 
 			String name = item.getType().name();
-			if(name.indexOf("PICKAXE") == -1 && name.indexOf("SPADE") == -1)
+			if(name.indexOf("PICKAXE") == -1 && name.indexOf("SHOVEL") == -1)
 				return;
 
 			HyperingEconomyGUI.getPlugin().antiGhostBlock(player);
