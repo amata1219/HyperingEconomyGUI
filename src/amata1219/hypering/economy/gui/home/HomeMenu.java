@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import amata1219.cords.spigot.Cords;
 import amata1219.hypering.economy.HyperingEconomyAPI;
 import amata1219.hypering.economy.SQL;
 import amata1219.hypering.economy.gui.GUIListener;
@@ -63,6 +64,8 @@ public class HomeMenu implements GraphicalUserInterface {
 
 		ItemStack hogochi = ItemHelper.createItem(Material.STICK, ChatColor.GOLD + "保護地メニュー", ChatColor.GRAY + "・保護地メニューに移動します。", ChatColor.GRAY + "・保護地の上にいた場合そこが操作の対象となります。", ChatColor.GRAY + "・そうでない場合は左クリックで土地を選択します。");
 
+		ItemStack servers = ItemHelper.createItem(Material.GLASS, ChatColor.GOLD + "サーバーを移動する", ChatColor.GRAY + "");
+
 		inventory.setItem(1, status);
 		inventory.setItem(3, send);
 		inventory.setItem(4, buy);
@@ -73,6 +76,7 @@ public class HomeMenu implements GraphicalUserInterface {
 		inventory.setItem(12, vote);
 		inventory.setItem(13, notification);
 		inventory.setItem(14, hogochi);
+		inventory.setItem(15, servers);
 
 		inventory.setItem(0, ItemHelper.createSeasonalColorWool1());
 		inventory.setItem(8, ItemHelper.createSeasonalColorWool2());
@@ -107,14 +111,13 @@ public class HomeMenu implements GraphicalUserInterface {
 		ItemHelper.addLore(status, ChatColor.GRAY + "チケット: " + api.getTickets(uuid) + "枚");
 
 		if(HyperingEconomy.isEconomyEnable()){
-			TotalAssetsRanking ranking = HyperingEconomyGUI.getTotalAssetsRanking();
-
 			long money = api.getMoney(uuid);
 			ItemHelper.addLore(status, ChatColor.GRAY + "所持金: ¥" + money);
 
 			ItemHelper.addLore(status, ChatColor.GRAY + "");
 
 			ItemHelper.addLore(status, ChatColor.GRAY + "総資産:");
+			TotalAssetsRanking ranking = HyperingEconomyGUI.getTotalAssetsRanking();
 			ItemHelper.addLore(status, ChatColor.GRAY + "  順位: " + ranking.getRank(uuid));
 			ItemHelper.addLore(status, ChatColor.GRAY + "  SCORE: " + TotalAssetsRanking.calc(money, api.getTicketPrice(), uuid));
 		}
@@ -204,6 +207,9 @@ public class HomeMenu implements GraphicalUserInterface {
 			Meta.removeMeta(manager.getPlayer());
 
 			manager.display(Type.HOGOCHI_MENU);
+			break;
+		case 15:
+			manager.getPlayer().openInventory(Cords.getPlugin().servers);
 			break;
 		default:
 			break;
