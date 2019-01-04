@@ -1,11 +1,7 @@
 package amata1219.hypering.economy.gui.home;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
 import amata1219.hypering.economy.gui.util.ItemHelper;
 import amata1219.hypering.economy.gui.util.Type;
 
@@ -21,10 +17,6 @@ public class Notification implements GraphicalUserInterface {
 		Notification notification = new Notification();
 
 		Inventory inventory = ItemHelper.createInventory(27, Type.NOTIFICATION);
-
-		ItemStack test = ItemHelper.createItem(Material.TROPICAL_FISH, ChatColor.GOLD + "TIP！", ChatColor.GRAY + "/g コマンドで便利なGUIを表示するよ！");
-
-		inventory.setItem(1, test);
 
 		inventory.setItem(0, ItemHelper.createSeasonalColorWool1());
 		inventory.setItem(8, ItemHelper.createSeasonalColorWool2());
