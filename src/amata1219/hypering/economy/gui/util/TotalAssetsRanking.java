@@ -44,6 +44,7 @@ public class TotalAssetsRanking {
 				result.close();
 			}
 			statement.close();
+			//con.close();
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
